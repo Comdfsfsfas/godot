@@ -2,9 +2,11 @@
 /*  file_access_unix.cpp                                                  */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -311,16 +313,18 @@ bool FileAccessUnix::store_buffer(const uint8_t *p_src, uint64_t p_length) {
 }
 
 bool FileAccessUnix::file_exists(const String &p_path) {
+	int err;
 	struct stat st = {};
-	const CharString filename_utf8 = fix_path(p_path).utf8();
+	String filename = fix_path(p_path);
 
 	// Does the name exist at all?
-	if (stat(filename_utf8.get_data(), &st)) {
+	err = stat(filename.utf8().get_data(), &st);
+	if (err) {
 		return false;
 	}
 
 	// See if we have access to the file
-	if (access(filename_utf8.get_data(), F_OK)) {
+	if (access(filename.utf8().get_data(), F_OK)) {
 		return false;
 	}
 

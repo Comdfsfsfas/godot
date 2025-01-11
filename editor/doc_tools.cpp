@@ -2,9 +2,11 @@
 /*  doc_tools.cpp                                                         */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -75,7 +77,7 @@ static String _translate_doc_string(const String &p_text) {
 	return translated.indent(indent);
 }
 
-// Comparator for constructors, based on `MethodDoc` operator.
+// Comparator for constructors, based on `MetodDoc` operator.
 struct ConstructorCompare {
 	_FORCE_INLINE_ bool operator()(const DocData::MethodDoc &p_lhs, const DocData::MethodDoc &p_rhs) const {
 		// Must be a constructor (i.e. assume named for the class)
@@ -1658,7 +1660,7 @@ Error DocTools::save_classes(const String &p_default_path, const HashMap<String,
 			// Modules are nested deep, so change the path to reference the same schema everywhere.
 			schema_path = save_path.contains("modules/") ? "../../../doc/class.xsd" : "../class.xsd";
 		} else {
-			schema_path = "https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd";
+			schema_path = "https://raw.githubusercontent.com/Redot-Engine/redot-engine/master/doc/class.xsd";
 		}
 		header += vformat(
 				R"( xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="%s">)",

@@ -74,11 +74,12 @@ class CsgOpNode final : public CsgNode {
 
   CsgNodeType GetNodeType() const override;
 
-  ~CsgOpNode();
-
  private:
-  mutable ConcurrentSharedPtr<std::vector<std::shared_ptr<CsgNode>>> impl_ =
-      ConcurrentSharedPtr<std::vector<std::shared_ptr<CsgNode>>>({});
+  struct Impl {
+    std::vector<std::shared_ptr<CsgNode>> children_;
+    bool forcedToLeafNodes_ = false;
+  };
+  mutable ConcurrentSharedPtr<Impl> impl_ = ConcurrentSharedPtr<Impl>(Impl{});
   OpType op_;
   mat3x4 transform_ = la::identity;
   // the following fields are for lazy evaluation, so they are mutable

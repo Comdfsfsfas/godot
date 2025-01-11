@@ -2,9 +2,11 @@
 /*  metal_objects.h                                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -850,9 +852,8 @@ public:
 			uint32_t front_reference = 0;
 			uint32_t back_reference = 0;
 			_FORCE_INLINE_ void apply(id<MTLRenderCommandEncoder> __unsafe_unretained p_enc) const {
-				if (!enabled) {
+				if (!enabled)
 					return;
-				}
 				[p_enc setStencilFrontReferenceValue:front_reference backReferenceValue:back_reference];
 			}
 		} stencil;
@@ -942,7 +943,7 @@ public:
 };
 
 // These functions are used to convert between Objective-C objects and
-// the RIDs used by Godot, respecting automatic reference counting.
+// the RIDs used by Redot, respecting automatic reference counting.
 namespace rid {
 
 // Converts an Objective-C object to a pointer, and incrementing the

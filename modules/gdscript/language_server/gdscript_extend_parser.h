@@ -2,9 +2,11 @@
 /*  gdscript_extend_parser.h                                              */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -43,12 +45,12 @@
 #define COLUMN_NUMBER_TO_INDEX(p_column) ((p_column) - 1)
 #endif
 
-#ifndef SYMBOL_SEPARATOR
-#define SYMBOL_SEPARATOR "::"
+#ifndef SYMBOL_SEPERATOR
+#define SYMBOL_SEPERATOR "::"
 #endif
 
 #ifndef JOIN_SYMBOLS
-#define JOIN_SYMBOLS(p_path, name) ((p_path) + SYMBOL_SEPARATOR + (name))
+#define JOIN_SYMBOLS(p_path, name) ((p_path) + SYMBOL_SEPERATOR + (name))
 #endif
 
 typedef HashMap<String, const lsp::DocumentSymbol *> ClassMembers;

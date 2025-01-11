@@ -2,9 +2,11 @@
 /*  animation_track_editor_plugins.cpp                                    */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -417,8 +419,8 @@ Rect2 AnimationTrackEditSpriteFrame::get_key_rect(int p_index, float p_pixels_se
 			animation_path = animation_path.replace(":frame", ":animation");
 			int animation_track = get_animation()->find_track(animation_path, get_animation()->track_get_type(get_track()));
 			float track_time = get_animation()->track_get_key_time(get_track(), p_index);
-			int animation_index = get_animation()->track_find_key(animation_track, track_time);
-			animation_name = get_animation()->track_get_key_value(animation_track, animation_index);
+			int animaiton_index = get_animation()->track_find_key(animation_track, track_time);
+			animation_name = get_animation()->track_get_key_value(animation_track, animaiton_index);
 		}
 
 		Ref<Texture2D> texture = sf->get_frame_texture(animation_name, frame);
@@ -509,8 +511,8 @@ void AnimationTrackEditSpriteFrame::draw_key(int p_index, float p_pixels_sec, in
 			animation_path = animation_path.replace(":frame", ":animation");
 			int animation_track = get_animation()->find_track(animation_path, get_animation()->track_get_type(get_track()));
 			float track_time = get_animation()->track_get_key_time(get_track(), p_index);
-			int animation_index = get_animation()->track_find_key(animation_track, track_time);
-			animation_name = get_animation()->track_get_key_value(animation_track, animation_index);
+			int animaiton_index = get_animation()->track_find_key(animation_track, track_time);
+			animation_name = get_animation()->track_get_key_value(animation_track, animaiton_index);
 		}
 
 		texture = sf->get_frame_texture(animation_name, frame);

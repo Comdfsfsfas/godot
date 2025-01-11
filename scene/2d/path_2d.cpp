@@ -2,9 +2,11 @@
 /*  path_2d.cpp                                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -138,14 +140,13 @@ void Path2D::_notification(int p_what) {
 					draw_polyline(v2p, get_tree()->get_debug_paths_color(), line_width, false);
 				}
 
-				// Draw fish bone every 4 points to reduce visual noise and performance impact
-				// (compared to drawing it for every point).
+				// Draw fish bones
 				{
 					PackedVector2Array v2p;
 					v2p.resize(3);
 					Vector2 *w = v2p.ptrw();
 
-					for (int i = 0; i < sample_count; i += 4) {
+					for (int i = 0; i < sample_count; i++) {
 						const Vector2 p = r[i].get_origin();
 						const Vector2 side = r[i].columns[1];
 						const Vector2 forward = r[i].columns[0];

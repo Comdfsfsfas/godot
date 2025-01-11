@@ -2,9 +2,11 @@
 /*  light_storage.cpp                                                     */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -2575,12 +2577,12 @@ Rect2i LightStorage::get_directional_shadow_rect() {
 	return _get_directional_shadow_rect(directional_shadow.size, directional_shadow.light_count, directional_shadow.current_light);
 }
 
-int LightStorage::get_directional_light_shadow_size(RID p_light_instance) {
+int LightStorage::get_directional_light_shadow_size(RID p_light_intance) {
 	ERR_FAIL_COND_V(directional_shadow.light_count == 0, 0);
 
 	Rect2i r = _get_directional_shadow_rect(directional_shadow.size, directional_shadow.light_count, 0);
 
-	LightInstance *light_instance = light_instance_owner.get_or_null(p_light_instance);
+	LightInstance *light_instance = light_instance_owner.get_or_null(p_light_intance);
 	ERR_FAIL_NULL_V(light_instance, 0);
 
 	switch (light_directional_get_shadow_mode(light_instance->light)) {

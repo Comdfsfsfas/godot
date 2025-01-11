@@ -2,9 +2,11 @@
 /*  nav_utils.h                                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -201,7 +203,6 @@ class Heap {
 	Indexer _indexer;
 
 public:
-	static constexpr uint32_t INVALID_INDEX = UINT32_MAX;
 	void reserve(uint32_t p_size) {
 		_buffer.reserve(p_size);
 	}
@@ -223,7 +224,7 @@ public:
 	T pop() {
 		ERR_FAIL_COND_V_MSG(_buffer.is_empty(), T(), "Can't pop an empty heap.");
 		T value = _buffer[0];
-		_indexer(value, INVALID_INDEX);
+		_indexer(value, UINT32_MAX);
 		if (_buffer.size() > 1) {
 			_buffer[0] = _buffer[_buffer.size() - 1];
 			_indexer(_buffer[0], 0);
@@ -247,7 +248,7 @@ public:
 
 	void clear() {
 		for (const T &value : _buffer) {
-			_indexer(value, INVALID_INDEX);
+			_indexer(value, UINT32_MAX);
 		}
 		_buffer.clear();
 	}

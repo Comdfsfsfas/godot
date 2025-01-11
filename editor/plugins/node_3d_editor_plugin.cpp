@@ -2,9 +2,11 @@
 /*  node_3d_editor_plugin.cpp                                             */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -128,21 +130,20 @@ constexpr real_t MAX_FOV = 179;
 
 void ViewportNavigationControl::_notification(int p_what) {
 	switch (p_what) {
+		case NOTIFICATION_ENTER_TREE: {
+			if (!is_connected(SceneStringName(mouse_exited), callable_mp(this, &ViewportNavigationControl::_on_mouse_exited))) {
+				connect(SceneStringName(mouse_exited), callable_mp(this, &ViewportNavigationControl::_on_mouse_exited));
+			}
+			if (!is_connected(SceneStringName(mouse_entered), callable_mp(this, &ViewportNavigationControl::_on_mouse_entered))) {
+				connect(SceneStringName(mouse_entered), callable_mp(this, &ViewportNavigationControl::_on_mouse_entered));
+			}
+		} break;
+
 		case NOTIFICATION_DRAW: {
 			if (viewport != nullptr) {
 				_draw();
 				_update_navigation();
 			}
-		} break;
-
-		case NOTIFICATION_MOUSE_ENTER: {
-			hovered = true;
-			queue_redraw();
-		} break;
-
-		case NOTIFICATION_MOUSE_EXIT: {
-			hovered = false;
-			queue_redraw();
 		} break;
 	}
 }
@@ -280,6 +281,16 @@ void ViewportNavigationControl::_update_navigation() {
 	}
 }
 
+void ViewportNavigationControl::_on_mouse_entered() {
+	hovered = true;
+	queue_redraw();
+}
+
+void ViewportNavigationControl::_on_mouse_exited() {
+	hovered = false;
+	queue_redraw();
+}
+
 void ViewportNavigationControl::set_navigation_mode(Node3DEditorViewport::NavigationMode p_nav_mode) {
 	nav_mode = p_nav_mode;
 }
@@ -304,17 +315,16 @@ void ViewportRotationControl::_notification(int p_what) {
 			axis_colors.push_back(get_theme_color(SNAME("axis_y_color"), EditorStringName(Editor)));
 			axis_colors.push_back(get_theme_color(SNAME("axis_z_color"), EditorStringName(Editor)));
 			queue_redraw();
+
+			if (!is_connected(SceneStringName(mouse_exited), callable_mp(this, &ViewportRotationControl::_on_mouse_exited))) {
+				connect(SceneStringName(mouse_exited), callable_mp(this, &ViewportRotationControl::_on_mouse_exited));
+			}
 		} break;
 
 		case NOTIFICATION_DRAW: {
 			if (viewport != nullptr) {
 				_draw();
 			}
-		} break;
-
-		case NOTIFICATION_MOUSE_EXIT: {
-			focused_axis = -2;
-			queue_redraw();
 		} break;
 	}
 }
@@ -411,7 +421,7 @@ void ViewportRotationControl::_process_click(int p_index, Vector2 p_position, bo
 			orbiting_index = p_index;
 		}
 	} else {
-		if (focused_axis > -1 && gizmo_activated) {
+		if (focused_axis > -1) {
 			viewport->_menu_option(axis_menu_options[focused_axis]);
 			_update_focus();
 		}
@@ -424,11 +434,10 @@ void ViewportRotationControl::_process_click(int p_index, Vector2 p_position, bo
 }
 
 void ViewportRotationControl::_process_drag(Ref<InputEventWithModifiers> p_event, int p_index, Vector2 p_position, Vector2 p_relative_position) {
-	if (orbiting_index == p_index && gizmo_activated) {
+	if (orbiting_index == p_index) {
 		if (Input::get_singleton()->get_mouse_mode() == Input::MOUSE_MODE_VISIBLE) {
 			Input::get_singleton()->set_mouse_mode(Input::MOUSE_MODE_CAPTURED);
 			orbiting_mouse_start = p_position;
-			viewport->previous_cursor = viewport->cursor;
 		}
 		viewport->_nav_orbit(p_event, p_relative_position);
 		focused_axis = -1;
@@ -440,35 +449,10 @@ void ViewportRotationControl::_process_drag(Ref<InputEventWithModifiers> p_event
 void ViewportRotationControl::gui_input(const Ref<InputEvent> &p_event) {
 	ERR_FAIL_COND(p_event.is_null());
 
-	// Key events
-	const Ref<InputEventKey> k = p_event;
-
-	if (k.is_valid() && k->is_action_pressed(SNAME("ui_cancel"), false, true)) {
-		if (Input::get_singleton()->get_mouse_mode() == Input::MOUSE_MODE_CAPTURED) {
-			Input::get_singleton()->set_mouse_mode(Input::MOUSE_MODE_VISIBLE);
-			Input::get_singleton()->warp_mouse(orbiting_mouse_start);
-			viewport->cursor = viewport->previous_cursor;
-			gizmo_activated = false;
-		}
-	}
-
 	// Mouse events
 	const Ref<InputEventMouseButton> mb = p_event;
-	if (mb.is_valid()) {
-		if (mb->get_button_index() == MouseButton::LEFT) {
-			_process_click(100, mb->get_position(), mb->is_pressed());
-			if (mb->is_pressed()) {
-				gizmo_activated = true;
-				grab_focus();
-			}
-		} else if (mb->get_button_index() == MouseButton::RIGHT) {
-			if (Input::get_singleton()->get_mouse_mode() == Input::MOUSE_MODE_CAPTURED) {
-				Input::get_singleton()->set_mouse_mode(Input::MOUSE_MODE_VISIBLE);
-				Input::get_singleton()->warp_mouse(orbiting_mouse_start);
-				viewport->cursor = viewport->previous_cursor;
-				gizmo_activated = false;
-			}
-		}
+	if (mb.is_valid() && mb->get_button_index() == MouseButton::LEFT) {
+		_process_click(100, mb->get_position(), mb->is_pressed());
 	}
 
 	const Ref<InputEventMouseMotion> mm = p_event;
@@ -510,6 +494,11 @@ void ViewportRotationControl::_update_focus() {
 	if (focused_axis != original_focus) {
 		queue_redraw();
 	}
+}
+
+void ViewportRotationControl::_on_mouse_exited() {
+	focused_axis = -2;
+	queue_redraw();
 }
 
 void ViewportRotationControl::set_viewport(Node3DEditorViewport *p_viewport) {
@@ -2085,8 +2074,8 @@ void Node3DEditorViewport::_sinput(const Ref<InputEvent> &p_event) {
 			}
 
 			bool current_hover_handle_secondary = false;
-			int current_hover_handle = spatial_editor->get_current_hover_gizmo_handle(current_hover_handle_secondary);
-			if (found_gizmo != spatial_editor->get_current_hover_gizmo() || found_handle != current_hover_handle || found_handle_secondary != current_hover_handle_secondary) {
+			int curreny_hover_handle = spatial_editor->get_current_hover_gizmo_handle(current_hover_handle_secondary);
+			if (found_gizmo != spatial_editor->get_current_hover_gizmo() || found_handle != curreny_hover_handle || found_handle_secondary != current_hover_handle_secondary) {
 				spatial_editor->set_current_hover_gizmo(found_gizmo);
 				spatial_editor->set_current_hover_gizmo_handle(found_handle, found_handle_secondary);
 				spatial_editor->get_single_selected_node()->update_gizmos();
@@ -3338,7 +3327,7 @@ void Node3DEditorViewport::_draw() {
 		force_over_plugin_list->forward_3d_force_draw_over_viewport(surface);
 	}
 
-	if (surface->has_focus() || rotation_control->has_focus()) {
+	if (surface->has_focus()) {
 		Size2 size = surface->get_size();
 		Rect2 r = Rect2(Point2(), size);
 		get_theme_stylebox(SNAME("FocusViewport"), EditorStringName(EditorStyles))->draw(surface->get_canvas_item(), r);
@@ -5425,7 +5414,7 @@ void Node3DEditorViewport::update_transform_numeric() {
 			break;
 		case TRANSFORM_SCALE:
 			// To halve the size of an object in Blender, you scale it by 0.5.
-			// Doing the same in Godot is considered scaling it by -0.5.
+			// Doing the same in Redot is considered scaling it by -0.5.
 			motion *= (value - 1.0);
 			set_message(vformat(TTR("Scaling %s."), motion));
 			break;
@@ -5791,7 +5780,6 @@ Node3DEditorViewport::Node3DEditorViewport(Node3DEditor *p_spatial_editor, int p
 	rotation_control->set_custom_minimum_size(Size2(80, 80) * EDSCALE);
 	rotation_control->set_h_size_flags(SIZE_SHRINK_END);
 	rotation_control->set_viewport(this);
-	rotation_control->set_focus_mode(FOCUS_CLICK);
 	top_right_vbox->add_child(rotation_control);
 
 	frame_time_panel = memnew(PanelContainer);
@@ -6450,6 +6438,7 @@ Dictionary Node3DEditor::get_state() const {
 		pd["sun_rotation"] = sun_rotation;
 
 		pd["environ_sky_color"] = environ_sky_color->get_pick_color();
+		pd["environ_hz_color"] = environ_hz_color->get_pick_color();
 		pd["environ_ground_color"] = environ_ground_color->get_pick_color();
 		pd["environ_energy"] = environ_energy->get_value();
 		pd["environ_glow_enabled"] = environ_glow_button->is_pressed();
@@ -6582,6 +6571,7 @@ void Node3DEditor::set_state(const Dictionary &p_state) {
 		sun_rotation = pd["sun_rotation"];
 
 		environ_sky_color->set_pick_color(pd["environ_sky_color"]);
+		environ_hz_color->set_pick_color(pd["environ_hz_color"]);
 		environ_ground_color->set_pick_color(pd["environ_ground_color"]);
 		environ_energy->set_value(pd["environ_energy"]);
 		environ_glow_button->set_pressed(pd["environ_glow_enabled"]);
@@ -8174,6 +8164,7 @@ void Node3DEditor::_update_theme() {
 
 	sun_color->set_custom_minimum_size(Size2(0, get_theme_constant(SNAME("color_picker_button_height"), EditorStringName(Editor))));
 	environ_sky_color->set_custom_minimum_size(Size2(0, get_theme_constant(SNAME("color_picker_button_height"), EditorStringName(Editor))));
+	environ_hz_color->set_custom_minimum_size(Size2(0, get_theme_constant(SNAME("color_picker_button_height"), EditorStringName(Editor))));
 	environ_ground_color->set_custom_minimum_size(Size2(0, get_theme_constant(SNAME("color_picker_button_height"), EditorStringName(Editor))));
 
 	context_toolbar_panel->add_theme_style_override(SceneStringName(panel), get_theme_stylebox(SNAME("ContextualToolbar"), EditorStringName(EditorStyles)));
@@ -8666,8 +8657,8 @@ void Node3DEditor::_preview_settings_changed() {
 	}
 
 	{ //preview env
-		sky_material->set_energy_multiplier(environ_energy->get_value());
-		Color hz_color = environ_sky_color->get_pick_color().lerp(environ_ground_color->get_pick_color(), 0.5);
+		sky_material->set_sky_energy_multiplier(environ_energy->get_value());
+		Color hz_color = environ_sky_color->get_pick_color().lerp(environ_ground_color->get_pick_color(), 0.5).lerp(environ_hz_color->get_pick_color(), 0.5);
 		float hz_lum = hz_color.get_luminance() * 3.333;
 		hz_color = hz_color.lerp(Color(hz_lum, hz_lum, hz_lum), 0.5);
 		sky_material->set_sky_top_color(environ_sky_color->get_pick_color());
@@ -8696,8 +8687,9 @@ void Node3DEditor::_load_default_preview_settings() {
 	sun_angle_altitude->set_value(-Math::rad_to_deg(sun_rotation.x));
 	sun_angle_azimuth->set_value(180.0 - Math::rad_to_deg(sun_rotation.y));
 	sun_direction->queue_redraw();
-	environ_sky_color->set_pick_color(Color(0.385, 0.454, 0.55));
-	environ_ground_color->set_pick_color(Color(0.2, 0.169, 0.133));
+	environ_sky_color->set_pick_color(Color(0.129, 0.129, 0.129));
+	environ_hz_color->set_pick_color(Color(0.129, 0.129, 0.129));
+	environ_ground_color->set_pick_color(Color(0.129, 0.129, 0.129));
 	environ_energy->set_value(1.0);
 	if (OS::get_singleton()->get_current_rendering_method() != "gl_compatibility") {
 		environ_glow_button->set_pressed(true);
@@ -9355,6 +9347,11 @@ void fragment() {
 		environ_sky_color->connect("color_changed", callable_mp(this, &Node3DEditor::_preview_settings_changed).unbind(1));
 		environ_sky_color->get_popup()->connect("about_to_popup", callable_mp(EditorNode::get_singleton(), &EditorNode::setup_color_picker).bind(environ_sky_color->get_picker()));
 		environ_vb->add_margin_child(TTR("Sky Color"), environ_sky_color);
+		environ_hz_color = memnew(ColorPickerButton);
+		environ_hz_color->set_edit_alpha(false);
+		environ_hz_color->connect("color_changed", callable_mp(this, &Node3DEditor::_preview_settings_changed).unbind(1));
+		environ_hz_color->get_popup()->connect("about_to_popup", callable_mp(EditorNode::get_singleton(), &EditorNode::setup_color_picker).bind(environ_hz_color->get_picker()));
+		environ_vb->add_margin_child(TTR("Horizon Color"), environ_hz_color);
 		environ_ground_color = memnew(ColorPickerButton);
 		environ_ground_color->connect("color_changed", callable_mp(this, &Node3DEditor::_preview_settings_changed).unbind(1));
 		environ_ground_color->set_edit_alpha(false);

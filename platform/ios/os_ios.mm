@@ -2,9 +2,11 @@
 /*  os_ios.mm                                                             */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -130,12 +132,12 @@ void OS_IOS::initialize_modules() {
 	ios = memnew(iOS);
 	Engine::get_singleton()->add_singleton(Engine::Singleton("iOS", ios));
 
-	joypad_apple = memnew(JoypadApple);
+	joypad_ios = memnew(JoypadIOS);
 }
 
 void OS_IOS::deinitialize_modules() {
-	if (joypad_apple) {
-		memdelete(joypad_apple);
+	if (joypad_ios) {
+		memdelete(joypad_ios);
 	}
 
 	if (ios) {
@@ -169,14 +171,16 @@ bool OS_IOS::iterate() {
 		DisplayServer::get_singleton()->process_events();
 	}
 
-	joypad_apple->process_joypads();
-
 	return Main::iteration();
 }
 
 void OS_IOS::start() {
 	if (Main::start() == EXIT_SUCCESS) {
 		main_loop->initialize();
+	}
+
+	if (joypad_ios) {
+		joypad_ios->start_processing();
 	}
 }
 
@@ -348,10 +352,10 @@ String OS_IOS::get_temp_path() const {
 }
 
 String OS_IOS::get_locale() const {
-	NSString *preferredLanguage = [NSLocale preferredLanguages].firstObject;
+	NSString *preferedLanguage = [NSLocale preferredLanguages].firstObject;
 
-	if (preferredLanguage) {
-		return String::utf8([preferredLanguage UTF8String]).replace("-", "_");
+	if (preferedLanguage) {
+		return String::utf8([preferedLanguage UTF8String]).replace("-", "_");
 	}
 
 	NSString *localeIdentifier = [[NSLocale currentLocale] localeIdentifier];

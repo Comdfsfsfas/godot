@@ -2,9 +2,11 @@
 /*  steam_tracker.h                                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -36,7 +38,7 @@
 #include "core/os/os.h"
 
 // SteamTracker is used to load SteamAPI dynamic library and initialize
-// the interface, this notifies Steam that Godot editor is running and
+// the interface, this notifies Steam that Redot editor is running and
 // allow tracking of the usage time of child instances of the engine
 // (e.g., opened projects).
 //
@@ -62,7 +64,7 @@ class SteamTracker {
 	SteamAPI_InitFunction steam_init_function = nullptr;
 	SteamAPI_InitFlatFunction steam_init_flat_function = nullptr;
 	SteamAPI_ShutdownFunction steam_shutdown_function = nullptr;
-	bool steam_initialized = false;
+	bool steam_initalized = false;
 
 public:
 	SteamTracker();

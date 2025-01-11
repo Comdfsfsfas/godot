@@ -2,9 +2,11 @@
 /*  display_server_wayland.h                                              */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -105,12 +107,6 @@ class DisplayServerWayland : public DisplayServer {
 		Point2i hotspot;
 	};
 
-	enum class SuspendState {
-		NONE, // Unsuspended.
-		TIMEOUT, // Legacy fallback.
-		CAPABILITY, // New "suspended" wm_capability flag.
-	};
-
 	CursorShape cursor_shape = CURSOR_ARROW;
 	DisplayServer::MouseMode mouse_mode = DisplayServer::MOUSE_MODE_VISIBLE;
 
@@ -124,7 +120,7 @@ class DisplayServerWayland : public DisplayServer {
 	String ime_text;
 	Vector2i ime_selection;
 
-	SuspendState suspend_state = SuspendState::NONE;
+	bool suspended = false;
 	bool emulate_vsync = false;
 
 	String rendering_driver;

@@ -2,9 +2,11 @@
 /*  gdscript_parser.cpp                                                   */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -196,7 +198,7 @@ void GDScriptParser::push_warning(const Node *p_source, GDScriptWarning::Code p_
 	if (is_ignoring_warnings) {
 		return;
 	}
-	if (GLOBAL_GET("debug/gdscript/warnings/exclude_addons") && script_path.begins_with("res://addons/")) {
+	if (GLOBAL_GET("debug/gdscript/warnings/exclude_addons").booleanize() && script_path.begins_with("res://addons/")) {
 		return;
 	}
 	GDScriptWarning::WarnLevel warn_level = (GDScriptWarning::WarnLevel)(int)GLOBAL_GET(GDScriptWarning::get_settings_path_from_code(p_code));
@@ -3624,7 +3626,7 @@ GDScriptParser::ExpressionNode *GDScriptParser::parse_type_test(ExpressionNode *
 }
 
 GDScriptParser::ExpressionNode *GDScriptParser::parse_yield(ExpressionNode *p_previous_operand, bool p_can_assign) {
-	push_error(R"("yield" was removed in Godot 4. Use "await" instead.)");
+	push_error(R"("yield" was removed in Redot 4. Use "await" instead.)");
 	return nullptr;
 }
 

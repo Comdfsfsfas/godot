@@ -2,9 +2,11 @@
 /*  test_navigation_server_3d.h                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -634,7 +636,7 @@ TEST_SUITE("[Navigation]") {
 			CHECK_EQ(source_geometry->get_indices().size(), 6);
 		}
 
-		SUBCASE("Parsed geometry should be extendable with other geometry") {
+		SUBCASE("Parsed geometry should be extendible with other geometry") {
 			source_geometry->merge(source_geometry); // Merging with itself.
 			const Vector<float> vertices = source_geometry->get_vertices();
 			const Vector<int> indices = source_geometry->get_indices();

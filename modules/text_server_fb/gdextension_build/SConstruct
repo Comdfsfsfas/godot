@@ -1,7 +1,13 @@
 #!/usr/bin/env python
-# ruff: noqa: F821
+
+import atexit
+import time
+from typing import TYPE_CHECKING
 
 import methods
+
+if TYPE_CHECKING:
+    from misc.utility.scons_hints import *
 
 # For the reference:
 # - CCFLAGS are compilation flags shared between C and C++
@@ -10,6 +16,8 @@ import methods
 # - CPPFLAGS are for pre-processor flags
 # - CPPDEFINES are for pre-processor defines
 # - LINKFLAGS are for linking flags
+
+time_at_start = time.time()
 
 env = SConscript("./godot-cpp/SConstruct")
 env.__class__.disable_warnings = methods.disable_warnings
@@ -22,6 +30,9 @@ opts.Add(BoolVariable("thorvg_enabled", "Use ThorVG library (require FreeType)",
 opts.Add(BoolVariable("verbose", "Enable verbose output for the compilation", False))
 
 opts.Update(env)
+
+if not env["verbose"]:
+    methods.no_verbose(env)
 
 # ThorVG
 if env["thorvg_enabled"] and env["freetype_enabled"]:
@@ -118,7 +129,6 @@ if env["msdfgen_enabled"] and env["freetype_enabled"]:
     thirdparty_msdfgen_dir = "../../../thirdparty/msdfgen/"
     thirdparty_msdfgen_sources = [
         "core/Contour.cpp",
-        "core/DistanceMapping.cpp",
         "core/EdgeHolder.cpp",
         "core/MSDFErrorCorrection.cpp",
         "core/Projection.cpp",
@@ -129,15 +139,10 @@ if env["msdfgen_enabled"] and env["freetype_enabled"]:
         "core/edge-segments.cpp",
         "core/edge-selectors.cpp",
         "core/equation-solver.cpp",
-        # "core/export-svg.cpp",
         "core/msdf-error-correction.cpp",
         "core/msdfgen.cpp",
         "core/rasterization.cpp",
         "core/render-sdf.cpp",
-        # "core/save-bmp.cpp",
-        # "core/save-fl32.cpp",
-        # "core/save-rgba.cpp",
-        # "core/save-tiff.cpp",
         "core/sdf-error-estimation.cpp",
         "core/shape-description.cpp",
     ]
@@ -293,7 +298,7 @@ if env["platform"] == "macos":
     methods.write_macos_plist(
         f'./bin/libtextserver_fallback.macos.{env["target"]}.framework',
         f'libtextserver_fallback.macos.{env["target"]}',
-        "org.godotengine.textserver_fallback",
+        "org.redotengine.textserver_fallback",
         "Fallback Text Server",
     )
     library = env.SharedLibrary(
@@ -308,4 +313,18 @@ else:
 
 Default(library)
 
-methods.prepare_timer()
+
+def print_elapsed_time():
+    elapsed_time_sec = round(time.time() - time_at_start, 2)
+    time_centiseconds = round((elapsed_time_sec % 1) * 100)
+    print(
+        "{}[Time elapsed: {}.{:02}]{}".format(
+            methods.Ansi.GRAY,
+            time.strftime("%H:%M:%S", time.gmtime(elapsed_time_sec)),
+            time_centiseconds,
+            methods.Ansi.RESET,
+        )
+    )
+
+
+atexit.register(print_elapsed_time)

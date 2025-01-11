@@ -2,9 +2,11 @@
 /*  csg_shape.cpp                                                         */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -913,13 +915,6 @@ PackedStringArray CSGShape3D::get_configuration_warnings() const {
 		current_shape = current_shape->parent_shape;
 	}
 	return warnings;
-}
-
-Ref<TriangleMesh> CSGShape3D::generate_triangle_mesh() const {
-	if (root_mesh.is_valid()) {
-		return root_mesh->generate_triangle_mesh();
-	}
-	return Ref<TriangleMesh>();
 }
 
 void CSGShape3D::_bind_methods() {

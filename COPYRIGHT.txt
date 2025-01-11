@@ -1,9 +1,9 @@
-# Exhaustive licensing information for files in the Godot Engine repository
+# Exhaustive licensing information for files in the Redot Engine repository
 # =========================================================================
 #
 # This file aims at documenting the copyright and license for every source
-# file in the Godot Engine repository, and especially outline the files
-# whose license differs from the MIT/Expat license used by Godot Engine.
+# file in the Redot Engine repository, and especially outline the files
+# whose license differs from the MIT/Expat license used by Redot Engine.
 #
 # It is written as a machine-readable format following the debian/copyright
 # specification. Globbing patterns (e.g. "Files: *") mean that they affect
@@ -27,38 +27,43 @@
 #   License: Zlib
 # The exact copyright for each file in that library *may* differ, and some
 # files or code snippets might be distributed under other compatible licenses
-# (e.g. a public domain dedication), but as far as Godot Engine is concerned
+# (e.g. a public domain dedication), but as far as Redot Engine is concerned
 # the library is considered as a whole under the Zlib license.
 #
 # Note: When linking dynamically against thirdparty libraries instead of
-# building them into the Godot binary, you may remove the corresponding
+# building them into the Redot binary, you may remove the corresponding
 # license details from this file.
 
 -----------------------------------------------------------------------
 
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: Godot Engine
-Upstream-Contact: Rémi Verschelde <contact@godotengine.org>
-Source: https://github.com/godotengine/godot
+Upstream-Name: Redot Engine
+Upstream-Contact: Andevrs <redotengine@gmail.com>
+Source: https://github.com/Redot-Engine/redot-engine
 
 Files: *
-Comment: Godot Engine
-Copyright: 2014-present, Godot Engine contributors
+Comment: Redot Engine
+Copyright: 2024-present, Redot Engine contributors
+ 2014-present, Godot Engine contributors
  2007-2014, Juan Linietsky, Ariel Manzur
 License: Expat
 
-Files: ./icon.png
- ./icon.svg
- ./logo.png
+Files: ./logo.png
  ./logo.svg
-Comment: Godot Engine logo
-Copyright: 2017, Andrea Calabró
+ ./logo_outlined.png
+ ./logo_outlined.svg
+ ./editor/icons/TitleBarLogo.svg
+ ./icon.png
+ ./icon.svg
+Comment: Redot Engine Logos and Icons
+Copyright: 2024, Asrorul Irsyad
 License: CC-BY-4.0
 
 Files: ./core/math/convex_hull.cpp
  ./core/math/convex_hull.h
 Comment: Bullet Continuous Collision Detection and Physics Library
 Copyright: 2011, Ole Kniemeyer, MAXON, www.maxon.net
+ 2024-present, Redot Engine contributors
  2014-present, Godot Engine contributors
  2007-2014, Juan Linietsky, Ariel Manzur
 License: Expat and Zlib
@@ -84,6 +89,7 @@ Files: ./modules/godot_physics_3d/gjk_epa.cpp
  ./modules/godot_physics_3d/godot_shape_3d.h
 Comment: Bullet Continuous Collision Detection and Physics Library
 Copyright: 2003-2008, Erwin Coumans
+ 2024-present, Redot Engine contributors
  2014-present, Godot Engine contributors
  2007-2014, Juan Linietsky, Ariel Manzur
 License: Expat and Zlib
@@ -97,6 +103,7 @@ Files: ./modules/godot_physics_3d/joints/godot_cone_twist_joint_3d.cpp
  ./modules/godot_physics_3d/joints/godot_cone_twist_joint_3d.h
 Comment: Bullet Continuous Collision Detection and Physics Library
 Copyright: 2007, Starbreeze Studios
+ 2024-present, Redot Engine contributors
  2014-present, Godot Engine contributors
  2007-2014, Juan Linietsky, Ariel Manzur
 License: Expat and Zlib
@@ -111,6 +118,7 @@ License: Expat
 Files: ./modules/lightmapper_rd/lm_compute.glsl
 Comment: Joint Non-Local Means (JNLM) denoiser
 Copyright: 2020, Manuel Prandini
+ 2024-present, Redot Engine contributors
  2014-present, Godot Engine contributors
  2007-2014, Juan Linietsky, Ariel Manzur
 License: Expat
@@ -134,6 +142,7 @@ License: Apache-2.0
 Files: ./scene/animation/easing_equations.h
 Comment: Robert Penner's Easing Functions
 Copyright: 2001, Robert Penner
+ 2024-present, Redot Engine contributors
  2014-present, Godot Engine contributors
  2007-2014, Juan Linietsky, Ariel Manzur
 License: Expat
@@ -178,13 +187,8 @@ License: Apache-2.0
 
 Files: ./thirdparty/basis_universal/
 Comment: Basis Universal
-Copyright: 2019-2024, Binomial LLC.
+Copyright: 2022, Binomial LLC.
 License: Apache-2.0
-
-Files: ./thirdparty/betsy/
-Comment: Betsy
-Copyright: 2020-2022, Matias N. Goldberg
-License: Expat
 
 Files: ./thirdparty/brotli/
 Comment: Brotli
@@ -334,8 +338,8 @@ License: BSD-3-clause
 
 Files: ./thirdparty/libpng/
 Comment: libpng
-Copyright: 1995-2025, The PNG Reference Library Authors.
- 2018-2025, Cosmin Truta.
+Copyright: 1995-2024, The PNG Reference Library Authors.
+ 2018-2024, Cosmin Truta.
  2000-2002, 2004, 2006-2018 Glenn Randers-Pehrson.
  1996-1997, Andreas Dilger.
  1995-1996, Guy Eric Schalnat, Group 42, Inc.
@@ -392,11 +396,6 @@ Copyright: 1998-2010, Gilles Vollant
  2007-2008, Even Rouault
  2009-2010, Mathias Svensson
 License: Zlib
-
-Files: ./thirdparty/misc/bcdec.h
-Comment: bcdec
-Copyright: 2022, Sergii Kudlai
-License: Expat
 
 Files: ./thirdparty/misc/cubemap_coeffs.h
 Comment: Fast Filtering of Reflection Probes
@@ -479,7 +478,7 @@ License: BSD-2-clause
 
 Files: ./thirdparty/msdfgen/
 Comment: Multi-channel signed distance field generator
-Copyright: 2014-2024, Viktor Chlumsky
+Copyright: 2016-2022, Viktor Chlumsky
 License: Expat
 
 Files: ./thirdparty/nvapi/nvapi_minimal.h
@@ -517,6 +516,11 @@ Files: ./thirdparty/spirv-reflect/
 Comment: SPIRV-Reflect
 Copyright: 2017-2022, Google Inc.
 License: Apache-2.0
+
+Files: ./thirdparty/squish/
+Comment: libSquish
+Copyright: 2006, Simon Brown
+License: Expat
 
 Files: ./thirdparty/thorvg/
 Comment: ThorVG

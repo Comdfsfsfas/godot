@@ -2,9 +2,11 @@
 /*  os_macos.mm                                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -142,13 +144,13 @@ void OS_MacOS::finalize() {
 
 	delete_main_loop();
 
-	if (joypad_apple) {
-		memdelete(joypad_apple);
+	if (joypad_macos) {
+		memdelete(joypad_macos);
 	}
 }
 
 void OS_MacOS::initialize_joypads() {
-	joypad_apple = memnew(JoypadApple());
+	joypad_macos = memnew(JoypadMacOS());
 }
 
 void OS_MacOS::set_main_loop(MainLoop *p_main_loop) {
@@ -834,7 +836,7 @@ void OS_MacOS::run() {
 				if (DisplayServer::get_singleton()) {
 					DisplayServer::get_singleton()->process_events(); // Get rid of pending events.
 				}
-				joypad_apple->process_joypads();
+				joypad_macos->start_processing();
 
 				if (Main::iteration()) {
 					quit = true;

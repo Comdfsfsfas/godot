@@ -2,9 +2,11 @@
 /*  visual_instance_3d.cpp                                                */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -528,10 +530,6 @@ void GeometryInstance3D::set_ignore_occlusion_culling(bool p_enabled) {
 
 bool GeometryInstance3D::is_ignoring_occlusion_culling() {
 	return ignore_occlusion_culling;
-}
-
-Ref<TriangleMesh> GeometryInstance3D::generate_triangle_mesh() const {
-	return Ref<TriangleMesh>();
 }
 
 PackedStringArray GeometryInstance3D::get_configuration_warnings() const {

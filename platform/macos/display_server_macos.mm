@@ -2,9 +2,11 @@
 /*  display_server_macos.mm                                               */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -788,8 +790,6 @@ bool DisplayServerMacOS::has_feature(Feature p_feature) const {
 		case FEATURE_STATUS_INDICATOR:
 		case FEATURE_NATIVE_HELP:
 		case FEATURE_WINDOW_DRAG:
-		case FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE:
-		case FEATURE_EMOJI_AND_SYMBOL_PICKER:
 			return true;
 		default: {
 		}
@@ -3135,10 +3135,6 @@ Key DisplayServerMacOS::keyboard_get_label_from_physical(Key p_keycode) const {
 	return (Key)(KeyMappingMacOS::remap_key(macos_keycode, 0, true) | modifiers);
 }
 
-void DisplayServerMacOS::show_emoji_and_symbol_picker() const {
-	[[NSApplication sharedApplication] orderFrontCharacterPalette:nil];
-}
-
 void DisplayServerMacOS::process_events() {
 	ERR_FAIL_COND(!Thread::is_main_thread());
 
@@ -3534,7 +3530,7 @@ void DisplayServerMacOS::popup_open(WindowID p_window) {
 
 		if (was_empty && popup_list.is_empty()) {
 			// Inform OS that popup was opened, to close other native popups.
-			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.apple.HIToolbox.beginMenuTrackingNotification" object:@"org.godotengine.godot.popup_window"];
+			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.apple.HIToolbox.beginMenuTrackingNotification" object:@"org.redotengine.godot.popup_window"];
 		}
 		time_since_popup = OS::get_singleton()->get_ticks_msec();
 		popup_list.push_back(p_window);
@@ -3559,7 +3555,7 @@ void DisplayServerMacOS::popup_close(WindowID p_window) {
 	}
 	if (!was_empty && popup_list.is_empty()) {
 		// Inform OS that all popups are closed.
-		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.apple.HIToolbox.endMenuTrackingNotification" object:@"org.godotengine.godot.popup_window"];
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.apple.HIToolbox.endMenuTrackingNotification" object:@"org.redotengine.godot.popup_window"];
 	}
 }
 
@@ -3577,7 +3573,7 @@ bool DisplayServerMacOS::mouse_process_popups(bool p_close) {
 		}
 		if (!was_empty) {
 			// Inform OS that all popups are closed.
-			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.apple.HIToolbox.endMenuTrackingNotification" object:@"org.godotengine.godot.popup_window"];
+			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.apple.HIToolbox.endMenuTrackingNotification" object:@"org.redotengine.godot.popup_window"];
 		}
 	} else {
 		uint64_t delta = OS::get_singleton()->get_ticks_msec() - time_since_popup;
@@ -3609,7 +3605,7 @@ bool DisplayServerMacOS::mouse_process_popups(bool p_close) {
 		}
 		if (!was_empty && popup_list.is_empty()) {
 			// Inform OS that all popups are closed.
-			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.apple.HIToolbox.endMenuTrackingNotification" object:@"org.godotengine.godot.popup_window"];
+			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"com.apple.HIToolbox.endMenuTrackingNotification" object:@"org.redotengine.godot.popup_window"];
 		}
 	}
 	return closed;

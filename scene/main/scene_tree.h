@@ -2,9 +2,11 @@
 /*  scene_tree.h                                                          */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -266,6 +268,7 @@ private:
 		CALL_INPUT_TYPE_SHORTCUT_INPUT,
 		CALL_INPUT_TYPE_UNHANDLED_INPUT,
 		CALL_INPUT_TYPE_UNHANDLED_KEY_INPUT,
+		CALL_INPUT_TYPE_UNHANDLED_PICKING_INPUT,
 	};
 
 	//used by viewport

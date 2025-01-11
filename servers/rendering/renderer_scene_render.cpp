@@ -2,9 +2,11 @@
 /*  renderer_scene_render.cpp                                             */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -174,7 +176,7 @@ void RendererSceneRender::CameraData::set_multiview_camera(uint32_t p_view_count
 	Vector3 local_min_vec = main_transform_inv.xform(min_vec);
 	Vector3 local_max_vec = main_transform_inv.xform(max_vec);
 
-	// 15. get x and y from these to obtain left, top, right bottom for the frustum. Get the distance from near plane to camera origin to obtain near, and the distance from the far plane to the camera origin to obtain far.
+	// 15. get x and y from these to obtain left, top, right bottom for the frustum. Get the distance from near plane to camera origin to obtain near, and the distance from the far plane to the camer origin to obtain far.
 	float z_near = -near_plane.distance_to(main_transform.origin);
 	float z_far = -far_plane.distance_to(main_transform.origin);
 

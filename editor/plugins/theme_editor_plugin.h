@@ -2,9 +2,11 @@
 /*  theme_editor_plugin.h                                                 */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -462,9 +464,6 @@ protected:
 public:
 	void edit(const Ref<Theme> &p_theme);
 	Ref<Theme> get_edited_theme();
-
-	bool can_drop_data_fw(const Point2 &p_point, const Variant &p_data, Control *p_from);
-	void drop_data_fw(const Point2 &p_point, const Variant &p_data, Control *p_from);
 
 	ThemeEditor();
 };

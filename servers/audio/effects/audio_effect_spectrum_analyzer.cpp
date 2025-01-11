@@ -2,9 +2,11 @@
 /*  audio_effect_spectrum_analyzer.cpp                                    */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -145,8 +147,8 @@ void AudioEffectSpectrumAnalyzerInstance::process(const AudioFrame *p_src_frames
 	}
 
 	//determine time of capture
-	double remainder_sec = (temporal_fft_pos / mix_rate); //subtract remainder from mix time
-	last_fft_time = time - uint64_t(remainder_sec * 1000000.0);
+	double remainer_sec = (temporal_fft_pos / mix_rate); //subtract remainder from mix time
+	last_fft_time = time - uint64_t(remainer_sec * 1000000.0);
 }
 
 void AudioEffectSpectrumAnalyzerInstance::_bind_methods() {

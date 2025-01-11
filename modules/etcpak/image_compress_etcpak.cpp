@@ -2,9 +2,11 @@
 /*  image_compress_etcpak.cpp                                             */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -276,12 +278,12 @@ void _compress_etcpak(EtcpakType p_compress_type, Image *r_img) {
 				break;
 
 			case EtcpakType::ETCPAK_TYPE_DXT1:
-				CompressBc1Dither(src_mip_read, dest_mip_write, blocks, dest_mip_w);
+				CompressDxt1Dither(src_mip_read, dest_mip_write, blocks, dest_mip_w);
 				break;
 
 			case EtcpakType::ETCPAK_TYPE_DXT5:
 			case EtcpakType::ETCPAK_TYPE_DXT5_RA_AS_RG:
-				CompressBc3(src_mip_read, dest_mip_write, blocks, dest_mip_w);
+				CompressDxt5(src_mip_read, dest_mip_write, blocks, dest_mip_w);
 				break;
 
 			case EtcpakType::ETCPAK_TYPE_RGTC_R:

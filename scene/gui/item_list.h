@@ -2,9 +2,11 @@
 /*  item_list.h                                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -107,15 +109,12 @@ private:
 	bool auto_height = false;
 	float auto_height_value = 0.0;
 
-	bool wraparound_items = true;
-
 	Vector<Item> items;
 	Vector<int> separators;
 
 	SelectMode select_mode = SELECT_SINGLE;
 	IconMode icon_mode = ICON_MODE_LEFT;
-	VScrollBar *scroll_bar_v = nullptr;
-	HScrollBar *scroll_bar_h = nullptr;
+	VScrollBar *scroll_bar = nullptr;
 	TextServer::OverrunBehavior text_overrun_behavior = TextServer::OVERRUN_TRIM_ELLIPSIS;
 
 	uint64_t search_time_msec = 0;
@@ -307,17 +306,13 @@ public:
 	void set_auto_height(bool p_enable);
 	bool has_auto_height() const;
 
-	void set_wraparound_items(bool p_enable);
-	bool has_wraparound_items() const;
-
 	Size2 get_minimum_size() const override;
 
 	void set_autoscroll_to_bottom(const bool p_enable);
 
 	void force_update_list_size();
 
-	VScrollBar *get_v_scroll_bar() { return scroll_bar_v; }
-	HScrollBar *get_h_scroll_bar() { return scroll_bar_h; }
+	VScrollBar *get_v_scroll_bar() { return scroll_bar; }
 
 	ItemList();
 	~ItemList();

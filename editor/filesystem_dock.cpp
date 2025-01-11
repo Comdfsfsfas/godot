@@ -2,9 +2,11 @@
 /*  filesystem_dock.cpp                                                   */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -82,7 +84,7 @@ Control *FileSystemList::make_custom_tooltip(const String &p_text) const {
 }
 
 void FileSystemList::_line_editor_submit(const String &p_text) {
-	if (popup_edit_committed) {
+	if (popup_edit_commited) {
 		return; // Already processed by _text_editor_popup_modal_close
 	}
 
@@ -90,7 +92,7 @@ void FileSystemList::_line_editor_submit(const String &p_text) {
 		return; // ESC pressed, app focus lost, or forced close from code.
 	}
 
-	popup_edit_committed = true; // End edit popup processing.
+	popup_edit_commited = true; // End edit popup processing.
 	popup_editor->hide();
 
 	emit_signal(SNAME("item_edited"));
@@ -139,7 +141,7 @@ bool FileSystemList::edit_selected() {
 	line_editor->set_text(name);
 	line_editor->select(0, name.rfind_char('.'));
 
-	popup_edit_committed = false; // Start edit popup processing.
+	popup_edit_commited = false; // Start edit popup processing.
 	popup_editor->popup();
 	popup_editor->child_controls_changed();
 	line_editor->grab_focus();
@@ -151,7 +153,7 @@ String FileSystemList::get_edit_text() {
 }
 
 void FileSystemList::_text_editor_popup_modal_close() {
-	if (popup_edit_committed) {
+	if (popup_edit_commited) {
 		return; // Already processed by _text_editor_popup_modal_close
 	}
 
@@ -1184,7 +1186,7 @@ HashSet<String> FileSystemDock::_get_valid_conversions_for_file_paths(const Vect
 			return HashSet<String>();
 		}
 
-		// Get a list of all potential conversion-to targets.
+		// Get a list of all potentional conversion-to targets.
 		HashSet<String> current_valid_conversion_to_targets;
 		for (const Ref<EditorResourceConversionPlugin> &E : conversions) {
 			const String what = E->converts_to();
@@ -2167,7 +2169,7 @@ void FileSystemDock::_file_option(int p_option, const Vector<String> &p_selected
 			if (ClassDB::is_parent_class(resource_type, "Script") || extension == "tres" || extension == "tscn") {
 				external_program = EDITOR_GET("text_editor/external/exec_path");
 			} else if (extension == "res" || extension == "scn") {
-				// Binary resources have no meaningful editor outside Godot, so just fallback to something default.
+				// Binary resources have no meaningful editor outside Redot, so just fallback to something default.
 			} else if (resource_type == "CompressedTexture2D" || resource_type == "Image") {
 				if (extension == "svg" || extension == "svgz") {
 					external_program = EDITOR_GET("filesystem/external_programs/vector_image_editor");

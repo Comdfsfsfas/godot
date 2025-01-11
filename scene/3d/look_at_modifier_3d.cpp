@@ -2,9 +2,11 @@
 /*  look_at_modifier_3d.cpp                                               */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -501,11 +503,9 @@ void LookAtModifier3D::_process_modification() {
 	Transform3D bone_rest_space;
 	int parent_bone = skeleton->get_bone_parent(bone);
 	if (parent_bone < 0) {
-		bone_rest_space = skeleton->get_global_transform();
-		bone_rest_space.origin += skeleton->get_bone_rest(bone).origin;
+		bone_rest_space = skeleton->get_global_transform() * skeleton->get_bone_rest(bone);
 	} else {
-		bone_rest_space = skeleton->get_global_transform() * skeleton->get_bone_global_pose(parent_bone);
-		bone_rest_space.origin += skeleton->get_bone_rest(bone).origin;
+		bone_rest_space = skeleton->get_global_transform() * skeleton->get_bone_global_pose(parent_bone) * skeleton->get_bone_rest(bone);
 	}
 
 	// Calculate forward_vector and destination.

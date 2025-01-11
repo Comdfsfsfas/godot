@@ -2,9 +2,11 @@
 /*  post_import_plugin_skeleton_rest_fixer.cpp                            */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -645,13 +647,13 @@ void PostImportPluginSkeletonRestFixer::internal_process(InternalImportCategory 
 						// Scan descendants for mapped bones.
 						bool found_mapped = false;
 
-						Vector<int> descendants_to_process = src_skeleton->get_bone_children(src_idx);
-						while (descendants_to_process.size() > 0) {
-							int desc_idx = descendants_to_process[0];
-							descendants_to_process.erase(desc_idx);
+						Vector<int> decendants_to_process = src_skeleton->get_bone_children(src_idx);
+						while (decendants_to_process.size() > 0) {
+							int desc_idx = decendants_to_process[0];
+							decendants_to_process.erase(desc_idx);
 							Vector<int> desc_children = src_skeleton->get_bone_children(desc_idx);
 							for (const int &desc_child : desc_children) {
-								descendants_to_process.push_back(desc_child);
+								decendants_to_process.push_back(desc_child);
 							}
 
 							StringName desc_bone_name = is_renamed ? StringName(src_skeleton->get_bone_name(desc_idx)) : bone_map->find_profile_bone_name(src_skeleton->get_bone_name(desc_idx));

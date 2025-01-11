@@ -2,9 +2,11 @@
 /*  text_editor.cpp                                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -481,9 +483,6 @@ void TextEditor::_edit_option(int p_op) {
 		case BOOKMARK_REMOVE_ALL: {
 			code_editor->remove_all_bookmarks();
 		} break;
-		case EDIT_EMOJI_AND_SYMBOL: {
-			code_editor->get_text_editor()->show_emoji_and_symbol_picker();
-		} break;
 	}
 }
 
@@ -563,10 +562,6 @@ void TextEditor::_prepare_edit_menu() {
 
 void TextEditor::_make_context_menu(bool p_selection, bool p_can_fold, bool p_is_folded, Vector2 p_position) {
 	context_menu->clear();
-	if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_EMOJI_AND_SYMBOL_PICKER)) {
-		context_menu->add_item(TTR("Emoji & Symbols"), EDIT_EMOJI_AND_SYMBOL);
-		context_menu->add_separator();
-	}
 	if (p_selection) {
 		context_menu->add_shortcut(ED_GET_SHORTCUT("ui_cut"), EDIT_CUT);
 		context_menu->add_shortcut(ED_GET_SHORTCUT("ui_copy"), EDIT_COPY);

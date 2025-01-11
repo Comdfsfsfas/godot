@@ -2,9 +2,11 @@
 /*  atlas_merging_dialog.cpp                                              */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -216,7 +218,7 @@ void AtlasMergingDialog::_merge_confirmed(const String &p_path) {
 		}
 	}
 	undo_redo->commit_action();
-	committed_actions_count++;
+	commited_actions_count++;
 
 	hide();
 }
@@ -228,10 +230,10 @@ void AtlasMergingDialog::ok_pressed() {
 
 void AtlasMergingDialog::cancel_pressed() {
 	EditorUndoRedoManager *undo_redo = EditorUndoRedoManager::get_singleton();
-	for (int i = 0; i < committed_actions_count; i++) {
+	for (int i = 0; i < commited_actions_count; i++) {
 		undo_redo->undo();
 	}
-	committed_actions_count = 0;
+	commited_actions_count = 0;
 }
 
 void AtlasMergingDialog::custom_action(const String &p_action) {
@@ -289,7 +291,7 @@ void AtlasMergingDialog::update_tile_set(Ref<TileSet> p_tile_set) {
 	get_ok_button()->set_disabled(true);
 	merge_button->set_disabled(true);
 
-	committed_actions_count = 0;
+	commited_actions_count = 0;
 }
 
 AtlasMergingDialog::AtlasMergingDialog() {

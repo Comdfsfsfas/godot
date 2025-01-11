@@ -2,9 +2,11 @@
 /*  file_access_pack.h                                                    */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -37,7 +39,7 @@
 #include "core/templates/hash_set.h"
 #include "core/templates/list.h"
 
-// Godot's packed file magic header ("GDPC" in ASCII).
+// Redot's packed file magic header ("GDPC" in ASCII).
 #define PACK_HEADER_MAGIC 0x43504447
 // The current packed file format version number.
 #define PACK_FORMAT_VERSION 2

@@ -2,9 +2,11 @@
 /*  animation_mixer.h                                                     */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -311,7 +313,7 @@ protected:
 
 	RootMotionCache root_motion_cache;
 	AHashMap<Animation::TypeHash, TrackCache *, HashHasher> track_cache;
-	AHashMap<Ref<Animation>, LocalVector<TrackCache *>> animation_track_num_to_track_cache;
+	AHashMap<Ref<Animation>, LocalVector<TrackCache *>> animation_track_num_to_track_cashe;
 	HashSet<TrackCache *> playing_caches;
 	Vector<Node *> playing_audio_stream_players;
 
@@ -321,7 +323,7 @@ protected:
 	void _clear_playing_caches();
 	void _init_root_motion_cache();
 	bool _update_caches();
-	void _create_track_num_to_track_cache_for_animation(Ref<Animation> &p_animation);
+	void _create_track_num_to_track_cashe_for_animation(Ref<Animation> &p_animation);
 
 	/* ---- Audio ---- */
 	AudioServer::PlaybackType playback_type;
@@ -371,7 +373,7 @@ protected:
 	void _blend_init();
 	virtual bool _blend_pre_process(double p_delta, int p_track_count, const AHashMap<NodePath, int> &p_track_map);
 	virtual void _blend_capture(double p_delta);
-	void _blend_calc_total_weight(); // For indeterministic blending.
+	void _blend_calc_total_weight(); // For undeterministic blending.
 	void _blend_process(double p_delta, bool p_update_only = false);
 	void _blend_apply();
 	virtual void _blend_post_process();

@@ -2,9 +2,11 @@
 /*  sprite_frames_editor_plugin.cpp                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -1904,7 +1906,7 @@ SpriteFramesEditor::SpriteFramesEditor() {
 	add_anim->connect(SceneStringName(pressed), callable_mp(this, &SpriteFramesEditor::_animation_add));
 
 	duplicate_anim = memnew(Button);
-	duplicate_anim->set_theme_type_variation(SceneStringName(FlatButton));
+	duplicate_anim->set_flat(true);
 	hbc_animlist->add_child(duplicate_anim);
 	duplicate_anim->connect(SceneStringName(pressed), callable_mp(this, &SpriteFramesEditor::_animation_duplicate));
 
@@ -2130,6 +2132,7 @@ SpriteFramesEditor::SpriteFramesEditor() {
 	frame_list->set_select_mode(ItemList::SELECT_MULTI);
 
 	frame_list->set_max_columns(0);
+	frame_list->set_icon_mode(ItemList::ICON_MODE_TOP);
 	frame_list->set_max_text_lines(2);
 	SET_DRAG_FORWARDING_GCD(frame_list, SpriteFramesEditor);
 	frame_list->connect(SceneStringName(gui_input), callable_mp(this, &SpriteFramesEditor::_frame_list_gui_input));

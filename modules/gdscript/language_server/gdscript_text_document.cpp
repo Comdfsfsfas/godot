@@ -2,9 +2,11 @@
 /*  gdscript_text_document.cpp                                            */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -307,7 +309,7 @@ Dictionary GDScriptTextDocument::resolve(const Dictionary &p_params) {
 	} else if (data.is_string()) {
 		String query = data;
 
-		Vector<String> param_symbols = query.split(SYMBOL_SEPARATOR, false);
+		Vector<String> param_symbols = query.split(SYMBOL_SEPERATOR, false);
 
 		if (param_symbols.size() >= 2) {
 			StringName class_name = param_symbols[0];

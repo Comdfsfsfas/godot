@@ -2,9 +2,11 @@
 /*  viewport.h                                                            */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -288,6 +290,7 @@ private:
 	StringName shortcut_input_group;
 	StringName unhandled_input_group;
 	StringName unhandled_key_input_group;
+	StringName unhandled_picking_input_group;
 
 	void _update_audio_listener_2d();
 
@@ -487,9 +490,6 @@ private:
 
 	void _process_dirty_canvas_parent_orders();
 	void _propagate_world_2d_changed(Node *p_node);
-
-	void _window_start_drag(Window *p_window);
-	void _window_start_resize(SubWindowResize p_edge, Window *p_window);
 
 protected:
 	bool _set_size(const Size2i &p_size, const Size2i &p_size_2d_override, bool p_allocated);

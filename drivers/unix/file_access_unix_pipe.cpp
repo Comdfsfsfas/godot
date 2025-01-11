@@ -2,9 +2,11 @@
 /*  file_access_unix_pipe.cpp                                             */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -67,12 +69,10 @@ Error FileAccessUnixPipe::open_internal(const String &p_path, int p_mode_flags) 
 	ERR_FAIL_COND_V_MSG(fd[0] >= 0 || fd[1] >= 0, ERR_ALREADY_IN_USE, "Pipe is already in use.");
 
 	path = String("/tmp/") + p_path.replace("pipe://", "").replace("/", "_");
-	const CharString path_utf8 = path.utf8();
-
 	struct stat st = {};
-	int err = stat(path_utf8.get_data(), &st);
+	int err = stat(path.utf8().get_data(), &st);
 	if (err) {
-		if (mkfifo(path_utf8.get_data(), 0600) != 0) {
+		if (mkfifo(path.utf8().get_data(), 0600) != 0) {
 			last_error = ERR_FILE_CANT_OPEN;
 			return last_error;
 		}
@@ -81,7 +81,7 @@ Error FileAccessUnixPipe::open_internal(const String &p_path, int p_mode_flags) 
 		ERR_FAIL_COND_V_MSG(!S_ISFIFO(st.st_mode), ERR_ALREADY_IN_USE, "Pipe name is already used by file.");
 	}
 
-	int f = ::open(path_utf8.get_data(), O_RDWR | O_CLOEXEC | O_NONBLOCK);
+	int f = ::open(path.utf8().get_data(), O_RDWR | O_CLOEXEC | O_NONBLOCK);
 	if (f < 0) {
 		switch (errno) {
 			case ENOENT: {

@@ -412,7 +412,7 @@ def configure_msvc(env: "SConsEnvironment", vcvars_msvc_config):
                 if not caught and (is_cl and re_cl_capture.match(line)) or (not is_cl and re_link_capture.match(line)):
                     caught = True
                     try:
-                        with open(capture_path, "a", encoding=sys.stdout.encoding) as log:
+                        with open(capture_path, "a", encoding="utf-8") as log:
                             log.write(line + "\n")
                     except OSError:
                         print_warning(f'Failed to log captured line: "{line}".')
@@ -762,8 +762,8 @@ def configure_mingw(env: "SConsEnvironment"):
 
     ## LTO
 
-    if env["lto"] == "auto":  # Enable LTO for production with MinGW.
-        env["lto"] = "thin" if env["use_llvm"] else "full"
+    if env["lto"] == "auto":  # Full LTO for production with MinGW.
+        env["lto"] = "full"
 
     if env["lto"] != "none":
         if env["lto"] == "thin":
@@ -811,6 +811,9 @@ def configure_mingw(env: "SConsEnvironment"):
         env.Append(CFLAGS=san_flags)
         env.Append(CCFLAGS=san_flags)
         env.Append(LINKFLAGS=san_flags)
+
+    if env["use_llvm"] and os.name == "nt" and methods._can_color:
+        env.Append(CCFLAGS=["$(-fansi-escape-codes$)", "$(-fcolor-diagnostics$)"])
 
     if get_is_ar_thin_supported(env):
         env.Append(ARFLAGS=["--thin"])

@@ -2,9 +2,11 @@
 /*  resource_importer_ogg_vorbis.h                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -38,6 +40,10 @@
 class ResourceImporterOggVorbis : public ResourceImporter {
 	GDCLASS(ResourceImporterOggVorbis, ResourceImporter);
 
+	enum {
+		OGG_SYNC_BUFFER_SIZE = 8192,
+	};
+
 protected:
 	static void _bind_methods();
 
@@ -47,11 +53,8 @@ public:
 	virtual void show_advanced_options(const String &p_path) override;
 #endif
 
-#ifndef DISABLE_DEPRECATED
 	static Ref<AudioStreamOggVorbis> load_from_file(const String &p_path);
-	static Ref<AudioStreamOggVorbis> load_from_buffer(const Vector<uint8_t> &p_stream_data);
-#endif
-
+	static Ref<AudioStreamOggVorbis> load_from_buffer(const Vector<uint8_t> &file_data);
 	virtual void get_recognized_extensions(List<String> *p_extensions) const override;
 	virtual String get_save_extension() const override;
 	virtual String get_resource_type() const override;

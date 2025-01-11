@@ -2,9 +2,11 @@
 /*  openxr_api_extension.h                                                */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -99,10 +101,6 @@ public:
 	void openxr_swapchain_acquire(uint64_t p_swapchain_info);
 	RID openxr_swapchain_get_image(uint64_t p_swapchain_info);
 	void openxr_swapchain_release(uint64_t p_swapchain_info);
-
-	uint64_t get_projection_layer();
-
-	void set_render_region(const Rect2i &p_render_region);
 
 	enum OpenXRAlphaBlendModeSupport {
 		OPENXR_ALPHA_BLEND_MODE_SUPPORT_NONE = 0,

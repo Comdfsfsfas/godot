@@ -2,9 +2,11 @@
 /*  editor_theme_manager.cpp                                              */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -288,6 +290,10 @@ EditorThemeManager::ThemeConfiguration EditorThemeManager::_create_theme_config(
 				preset_accent_color = Color(0.26, 0.76, 1.00);
 				preset_base_color = Color(0.24, 0.26, 0.28);
 				preset_contrast = config.default_contrast;
+			} else if (config.preset == "Godot") {
+				preset_accent_color = Color(0.44, 0.73, 0.98);
+				preset_base_color = Color(0.21, 0.24, 0.29);
+				preset_contrast = config.default_contrast;
 			} else if (config.preset == "Godot 2") {
 				preset_accent_color = Color(0.53, 0.67, 0.89);
 				preset_base_color = Color(0.24, 0.23, 0.27);
@@ -297,7 +303,7 @@ EditorThemeManager::ThemeConfiguration EditorThemeManager::_create_theme_config(
 				preset_base_color = Color(0.24, 0.24, 0.24);
 				preset_contrast = config.default_contrast;
 			} else if (config.preset == "Light") {
-				preset_accent_color = Color(0.18, 0.50, 1.00);
+				preset_accent_color = Color(0.87, 0.22, 0.29);
 				preset_base_color = Color(0.9, 0.9, 0.9);
 				// A negative contrast rate looks better for light themes, since it better follows the natural order of UI "elevation".
 				preset_contrast = -0.06;
@@ -316,9 +322,13 @@ EditorThemeManager::ThemeConfiguration EditorThemeManager::_create_theme_config(
 				// The contrast rate value is irrelevant on a fully black theme.
 				preset_contrast = 0.0;
 				preset_draw_extra_borders = true;
+			} else if (config.preset == "Indigo") {
+				preset_accent_color = Color(0.37, 0.54, 0.91);
+				preset_base_color = Color(0.17, 0.17, 0.20);
+				preset_contrast = 0.4;
 			} else { // Default
-				preset_accent_color = Color(0.3, 0.3, 0.3);
-				preset_base_color = Color(0.16, 0.16, 0.14);
+				preset_accent_color = Color(0.87, 0.22, 0.29);
+				preset_base_color = Color(0.14, 0.12, 0.12);
 				preset_contrast = config.default_contrast;
 			}
 
@@ -1767,6 +1777,7 @@ void EditorThemeManager::_populate_standard_styles(const Ref<EditorTheme> &p_the
 		p_theme->set_icon("overbright_indicator", "ColorPicker", p_theme->get_icon(SNAME("OverbrightIndicator"), EditorStringName(EditorIcons)));
 		p_theme->set_icon("bar_arrow", "ColorPicker", p_theme->get_icon(SNAME("ColorPickerBarArrow"), EditorStringName(EditorIcons)));
 		p_theme->set_icon("picker_cursor", "ColorPicker", p_theme->get_icon(SNAME("PickerCursor"), EditorStringName(EditorIcons)));
+		p_theme->set_icon("wheel_picker_cursor", "ColorPicker", p_theme->get_icon(SNAME("WheelPickerCursor"), EditorStringName(EditorIcons)));
 
 		// ColorPickerButton.
 		p_theme->set_icon("bg", "ColorPickerButton", p_theme->get_icon(SNAME("GuiMiniCheckerboard"), EditorStringName(EditorIcons)));

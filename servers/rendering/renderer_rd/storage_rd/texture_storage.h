@@ -2,9 +2,11 @@
 /*  texture_storage.h                                                     */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -387,8 +389,6 @@ private:
 		RS::ViewportVRSMode vrs_mode = RS::VIEWPORT_VRS_DISABLED;
 		RS::ViewportVRSUpdateMode vrs_update_mode = RS::VIEWPORT_VRS_UPDATE_ONCE;
 		RID vrs_texture;
-
-		Rect2i render_region;
 
 		// overridden textures
 		struct RTOverridden {
@@ -787,9 +787,6 @@ public:
 	virtual RID render_target_get_override_velocity(RID p_render_target) const override;
 	RID render_target_get_override_velocity_slice(RID p_render_target, const uint32_t p_layer) const;
 	virtual RID render_target_get_override_velocity_depth(RID p_render_target) const override { return RID(); }
-
-	virtual void render_target_set_render_region(RID p_render_target, const Rect2i &p_render_region) override;
-	virtual Rect2i render_target_get_render_region(RID p_render_target) const override;
 
 	virtual RID render_target_get_texture(RID p_render_target) override;
 

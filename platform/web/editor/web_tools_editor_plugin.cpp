@@ -2,9 +2,11 @@
 /*  web_tools_editor_plugin.cpp                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -69,7 +71,7 @@ void WebToolsEditorPlugin::_download_zip() {
 	// Name the downloaded ZIP file to contain the project name and download date for easier organization.
 	// Replace characters not allowed (or risky) in Windows file names with safe characters.
 	// In the project name, all invalid characters become an empty string so that a name
-	// like "Platformer 2: Godette's Revenge" becomes "platformer_2-_godette-s_revenge".
+	// like "Platformer 2: Redot-chan's Revenge" becomes "platformer_2-_redot-chan-s_revenge".
 	const String project_name = GLOBAL_GET("application/config/name");
 	const String project_name_safe = project_name.to_lower().replace(" ", "_");
 	const String datetime_safe =

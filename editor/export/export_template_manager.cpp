@@ -2,9 +2,11 @@
 /*  export_template_manager.cpp                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -64,10 +66,11 @@ static DownloadsAvailability _get_downloads_availability() {
 	// (which always have a number following their status, e.g. "alpha1").
 	// Therefore, don't display download-related features when using a development version
 	// (whose builds aren't numbered).
-	if (String(VERSION_STATUS) == String("dev") ||
-			String(VERSION_STATUS) == String("alpha") ||
-			String(VERSION_STATUS) == String("beta") ||
-			String(VERSION_STATUS) == String("rc")) {
+	if (VERSION_STATUS_VERSION <= 0 &&
+			(String(VERSION_STATUS) == String("dev") ||
+					String(VERSION_STATUS) == String("alpha") ||
+					String(VERSION_STATUS) == String("beta") ||
+					String(VERSION_STATUS) == String("rc"))) {
 		return DOWNLOADS_NOT_AVAILABLE_FOR_DEV_BUILDS;
 	}
 
@@ -265,7 +268,7 @@ void ExportTemplateManager::_refresh_mirrors() {
 	is_refreshing_mirrors = true;
 
 	String current_version = VERSION_FULL_CONFIG;
-	const String mirrors_metadata_url = "https://godotengine.org/mirrorlist/" + current_version + ".json";
+	const String mirrors_metadata_url = "https://redotengine.org/api/mirrorlists/" + current_version + ".json";
 	request_mirrors->request(mirrors_metadata_url);
 }
 
@@ -764,7 +767,7 @@ String ExportTemplateManager::get_android_source_zip(const Ref<EditorExportPrese
 }
 
 String ExportTemplateManager::get_android_template_identifier(const Ref<EditorExportPreset> &p_preset) {
-	// The template identifier is the Godot version for the default template, and the full path plus md5 hash for custom templates.
+	// The template identifier is the Redot version for the default template, and the full path plus md5 hash for custom templates.
 	if (p_preset.is_valid()) {
 		String android_source_zip = p_preset->get("gradle_build/android_source_template");
 		if (!android_source_zip.is_empty()) {
@@ -1112,7 +1115,7 @@ ExportTemplateManager::ExportTemplateManager() {
 	install_file_dialog->set_access(FileDialog::ACCESS_FILESYSTEM);
 	install_file_dialog->set_file_mode(FileDialog::FILE_MODE_OPEN_FILE);
 	install_file_dialog->set_current_dir(EDITOR_DEF("_export_template_download_directory", ""));
-	install_file_dialog->add_filter("*.tpz", TTR("Godot Export Templates"));
+	install_file_dialog->add_filter("*.tpz", TTR("Redot Export Templates"));
 	install_file_dialog->connect("file_selected", callable_mp(this, &ExportTemplateManager::_install_file_selected).bind(false));
 	add_child(install_file_dialog);
 

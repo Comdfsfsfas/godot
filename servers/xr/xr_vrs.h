@@ -2,9 +2,11 @@
 /*  xr_vrs.h                                                              */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -44,7 +46,6 @@ class XRVRS : public Object {
 private:
 	float vrs_min_radius = 20.0;
 	float vrs_strength = 1.0;
-	Rect2i vrs_render_region;
 	bool vrs_dirty = true;
 
 	RID vrs_texture;
@@ -61,8 +62,6 @@ public:
 	void set_vrs_min_radius(float p_vrs_min_radius);
 	float get_vrs_strength() const;
 	void set_vrs_strength(float p_vrs_strength);
-	Rect2i get_vrs_render_region() const;
-	void set_vrs_render_region(const Rect2i &p_vrs_render_region);
 
 	RID make_vrs_texture(const Size2 &p_target_size, const PackedVector2Array &p_eye_foci);
 };

@@ -7,15 +7,124 @@ import re
 import subprocess
 import sys
 from collections import OrderedDict
+from enum import Enum
 from io import StringIO, TextIOWrapper
 from pathlib import Path
-from typing import Generator, List, Optional, Union, cast
+from typing import Final, Generator, List, Optional, Union, cast
 
-from misc.utility.color import print_error, print_info, print_warning
-
-# Get the "Godot" folder name ahead of time
+# Get the "Redot" folder name ahead of time
 base_folder_path = str(os.path.abspath(Path(__file__).parent)) + "/"
 base_folder_only = os.path.basename(os.path.normpath(base_folder_path))
+
+################################################################################
+# COLORIZE
+################################################################################
+
+IS_CI: Final[bool] = bool(os.environ.get("CI"))
+IS_TTY: Final[bool] = bool(sys.stdout.isatty())
+
+
+def _color_supported() -> bool:
+    """
+    Enables ANSI escape code support on Windows 10 and later (for colored console output).
+    See here: https://github.com/python/cpython/issues/73245
+    """
+    if sys.platform == "win32" and IS_TTY:
+        try:
+            from ctypes import WinError, byref, windll  # type: ignore
+            from ctypes.wintypes import DWORD  # type: ignore
+
+            stdout_handle = windll.kernel32.GetStdHandle(DWORD(-11))
+            mode = DWORD(0)
+            if not windll.kernel32.GetConsoleMode(stdout_handle, byref(mode)):
+                raise WinError()
+            mode = DWORD(mode.value | 4)
+            if not windll.kernel32.SetConsoleMode(stdout_handle, mode):
+                raise WinError()
+        except (TypeError, OSError) as e:
+            print(f"Failed to enable ANSI escape code support, disabling color output.\n{e}", file=sys.stderr)
+            return False
+
+    return IS_TTY or IS_CI
+
+
+# Colors are disabled in non-TTY environments such as pipes. This means
+# that if output is redirected to a file, it won't contain color codes.
+# Colors are always enabled on continuous integration.
+COLOR_SUPPORTED: Final[bool] = _color_supported()
+_can_color: bool = COLOR_SUPPORTED
+
+
+def toggle_color(value: Optional[bool] = None) -> None:
+    """
+    Explicitly toggle color codes, regardless of support.
+
+    - `value`: An optional boolean to explicitly set the color
+    state instead of toggling.
+    """
+    global _can_color
+    _can_color = value if value is not None else not _can_color
+
+
+class Ansi(Enum):
+    """
+    Enum class for adding ansi colorcodes directly into strings.
+    Automatically converts values to strings representing their
+    internal value, or an empty string in a non-colorized scope.
+    """
+
+    RESET = "\x1b[0m"
+
+    BOLD = "\x1b[1m"
+    DIM = "\x1b[2m"
+    ITALIC = "\x1b[3m"
+    UNDERLINE = "\x1b[4m"
+    STRIKETHROUGH = "\x1b[9m"
+    REGULAR = "\x1b[22;23;24;29m"
+
+    BLACK = "\x1b[30m"
+    RED = "\x1b[31m"
+    GREEN = "\x1b[32m"
+    YELLOW = "\x1b[33m"
+    BLUE = "\x1b[34m"
+    MAGENTA = "\x1b[35m"
+    CYAN = "\x1b[36m"
+    WHITE = "\x1b[37m"
+
+    LIGHT_BLACK = "\x1b[90m"
+    LIGHT_RED = "\x1b[91m"
+    LIGHT_GREEN = "\x1b[92m"
+    LIGHT_YELLOW = "\x1b[93m"
+    LIGHT_BLUE = "\x1b[94m"
+    LIGHT_MAGENTA = "\x1b[95m"
+    LIGHT_CYAN = "\x1b[96m"
+    LIGHT_WHITE = "\x1b[97m"
+
+    GRAY = LIGHT_BLACK if IS_CI else BLACK
+    """
+    Special case. GitHub Actions doesn't convert `BLACK` to gray as expected, but does convert `LIGHT_BLACK`.
+    By implementing `GRAY`, we handle both cases dynamically, while still allowing for explicit values if desired.
+    """
+
+    def __str__(self) -> str:
+        global _can_color
+        return str(self.value) if _can_color else ""
+
+
+def print_info(*values: object) -> None:
+    """Prints a informational message with formatting."""
+    print(f"{Ansi.GRAY}{Ansi.BOLD}INFO:{Ansi.REGULAR}", *values, Ansi.RESET)
+
+
+def print_warning(*values: object) -> None:
+    """Prints a warning message with formatting."""
+    print(f"{Ansi.YELLOW}{Ansi.BOLD}WARNING:{Ansi.REGULAR}", *values, Ansi.RESET, file=sys.stderr)
+
+
+def print_error(*values: object) -> None:
+    """Prints an error message with formatting."""
+    print(f"{Ansi.RED}{Ansi.BOLD}ERROR:{Ansi.REGULAR}", *values, Ansi.RESET, file=sys.stderr)
+
 
 # Listing all the folders we have converted
 # for SCU in scu_builders.py
@@ -129,18 +238,30 @@ def get_version_info(module_version_string="", silent=False):
         "minor": int(version.minor),
         "patch": int(version.patch),
         "status": str(version.status),
+        "status_version": int(version.status_version if version.status != "stable" else 0),
         "build": str(build_name),
         "module_config": str(version.module_config) + module_version_string,
         "website": str(version.website),
         "docs_branch": str(version.docs),
+        "godot_major": str(version.godot_major),
+        "godot_minor": str(version.godot_minor),
+        "godot_patch": str(version.godot_patch),
+        "godot_status": str(version.godot_status),
     }
 
     # For dev snapshots (alpha, beta, RC, etc.) we do not commit status change to Git,
     # so this define provides a way to override it without having to modify the source.
     if os.getenv("GODOT_VERSION_STATUS") is not None:
-        version_info["status"] = str(os.getenv("GODOT_VERSION_STATUS"))
+        version_status_str = str(os.getenv("GODOT_VERSION_STATUS"))
+        if "." in version_status_str:
+            version_status_str = version_status_str.split(".")
+            version_info["status_version"] = int(version_status_str[1])
+            version_status_str = version_status_str[0]
+        version_info["status"] = version_status_str
         if not silent:
-            print_info(f"Using version status '{version_info['status']}', overriding the original '{version.status}'.")
+            print_info(
+                f"Using version status '{version_info['status']}.{version_info['status_version']}', overriding the original '{version.status}.{version.status_version}'."
+            )
 
     # Parse Git hash if we're in a Git repo.
     githash = ""
@@ -239,7 +360,7 @@ def detect_modules(search_path, recursive=False):
         version_path = os.path.join(path, "version.py")
         if os.path.exists(version_path):
             with open(version_path, "r", encoding="utf-8") as f:
-                if 'short_name = "godot"' in f.read():
+                if 'short_name = "redot"' in f.read():
                     return True
         return False
 
@@ -396,8 +517,6 @@ def use_windows_spawn_fix(self, platform=None):
 
 
 def no_verbose(env):
-    from misc.utility.color import Ansi
-
     colors = [Ansi.BLUE, Ansi.BOLD, Ansi.REGULAR, Ansi.RESET]
 
     # There is a space before "..." to ensure that source file names can be
@@ -448,7 +567,7 @@ def detect_visual_c_compiler_version(tools_env):
     # "x86"           Native 32 bit compiler
     # "x86_amd64"     32 bit Cross Compiler for 64 bit
 
-    # There are other architectures, but Godot does not support them currently, so this function does not detect arm/amd64_arm
+    # There are other architectures, but Redot does not support them currently, so this function does not detect arm/amd64_arm
     # and similar architectures/compilers
 
     # Set chosen compiler to "not detected"
@@ -768,7 +887,7 @@ def show_progress(env):
 
             # Progress reporting is not available in non-TTY environments since it
             # messes with the output (for example, when writing to a file).
-            self.display = cast(bool, self.max and env["progress"] and sys.stdout.isatty())
+            self.display = cast(bool, self.max and env["progress"] and IS_TTY)
             if self.display and not self.max:
                 print_info("Performing initial build, progress percentage unavailable!")
 
@@ -912,31 +1031,6 @@ def prepare_cache(env) -> None:
     atexit.register(clean_cache, cache_path, cache_limit, env["verbose"])
 
 
-def prepare_purge(env):
-    from SCons.Script.Main import GetBuildFailures
-
-    def purge_flaky_files():
-        paths_to_keep = [env["ninja_file"]]
-        for build_failure in GetBuildFailures():
-            path = build_failure.node.path
-            if os.path.isfile(path) and path not in paths_to_keep:
-                os.remove(path)
-
-    atexit.register(purge_flaky_files)
-
-
-def prepare_timer():
-    import time
-
-    def print_elapsed_time(time_at_start: float):
-        time_elapsed = time.time() - time_at_start
-        time_formatted = time.strftime("%H:%M:%S", time.gmtime(time_elapsed))
-        time_centiseconds = round((time_elapsed % 1) * 100)
-        print_info(f"Time elapsed: {time_formatted}.{time_centiseconds}")
-
-    atexit.register(print_elapsed_time, time.time())
-
-
 def dump(env):
     # Dumps latest build information for debugging purposes and external tools.
     from json import dump
@@ -967,7 +1061,7 @@ def dump(env):
 #
 # To generate AND build from the command line:
 #   scons vsproj=yes vsproj_gen_only=no
-def generate_vs_project(env, original_args, project_name="godot"):
+def generate_vs_project(env, original_args, project_name="redot"):
     # Augmented glob_recursive that also fills the dirs argument with traversed directories that have content.
     def glob_recursive_2(pattern, dirs, node="."):
         from SCons import Node
@@ -1228,7 +1322,7 @@ def generate_vs_project(env, original_args, project_name="godot"):
                 vsconf = f'{target}|{a["platform"]}'
                 break
 
-        condition = "'$(GodotConfiguration)|$(GodotPlatform)'=='" + vsconf + "'"
+        condition = "'$(RedotConfiguration)|$(RedotPlatform)'=='" + vsconf + "'"
         itemlist = {}
         for item in activeItems:
             key = os.path.dirname(item).replace("\\", "_")
@@ -1241,7 +1335,7 @@ def generate_vs_project(env, original_args, project_name="godot"):
             properties.append(
                 "<ActiveProjectItemList_%s>;%s;</ActiveProjectItemList_%s>" % (x, ";".join(itemlist[x]), x)
             )
-        output = f'bin\\godot{env["PROGSUFFIX"]}'
+        output = f'bin\\redot{env["PROGSUFFIX"]}'
 
         with open("misc/msvs/props.template", "r", encoding="utf-8") as file:
             props_template = file.read()
@@ -1334,43 +1428,43 @@ def generate_vs_project(env, original_args, project_name="godot"):
     section1 = []
     section2 = []
     for conf in confs:
-        godot_platform = conf["platform"]
+        redot_platform = conf["platform"]
         for p in conf["arches"]:
             sln_plat = p["platform"]
             proj_plat = sln_plat
-            godot_arch = p["architecture"]
+            redot_arch = p["architecture"]
 
             # Redirect editor configurations for non-Windows platforms to the Windows one, so the solution has all the permutations
             # and VS doesn't complain about missing project configurations.
             # These configurations are disabled, so they show up but won't build.
-            if godot_platform != "windows":
+            if redot_platform != "windows":
                 section1 += [f"editor|{sln_plat} = editor|{proj_plat}"]
                 section2 += [
                     f"{{{proj_uuid}}}.editor|{proj_plat}.ActiveCfg = editor|{proj_plat}",
                 ]
 
             for t in conf["targets"]:
-                godot_target = t
+                redot_target = t
 
                 # Windows x86 is a special little flower that requires a project platform == Win32 but a solution platform == x86.
-                if godot_platform == "windows" and godot_target == "editor" and godot_arch == "x86_32":
+                if redot_platform == "windows" and redot_target == "editor" and redot_arch == "x86_32":
                     sln_plat = "x86"
 
                 configurations += [
-                    f'<ProjectConfiguration Include="{godot_target}|{proj_plat}">',
-                    f"  <Configuration>{godot_target}</Configuration>",
+                    f'<ProjectConfiguration Include="{redot_target}|{proj_plat}">',
+                    f"  <Configuration>{redot_target}</Configuration>",
                     f"  <Platform>{proj_plat}</Platform>",
                     "</ProjectConfiguration>",
                 ]
 
                 properties += [
-                    f"<PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='{godot_target}|{proj_plat}'\">",
-                    f"  <GodotConfiguration>{godot_target}</GodotConfiguration>",
-                    f"  <GodotPlatform>{proj_plat}</GodotPlatform>",
+                    f"<PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='{redot_target}|{proj_plat}'\">",
+                    f"  <RedotConfiguration>{redot_target}</RedotConfiguration>",
+                    f"  <RedotPlatform>{proj_plat}</RedotPlatform>",
                     "</PropertyGroup>",
                 ]
 
-                if godot_platform != "windows":
+                if redot_platform != "windows":
                     configurations += [
                         f'<ProjectConfiguration Include="editor|{proj_plat}">',
                         "  <Configuration>editor</Configuration>",
@@ -1380,21 +1474,21 @@ def generate_vs_project(env, original_args, project_name="godot"):
 
                     properties += [
                         f"<PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='editor|{proj_plat}'\">",
-                        "  <GodotConfiguration>editor</GodotConfiguration>",
-                        f"  <GodotPlatform>{proj_plat}</GodotPlatform>",
+                        "  <RedotConfiguration>editor</RedotConfiguration>",
+                        f"  <RedotPlatform>{proj_plat}</RedotPlatform>",
                         "</PropertyGroup>",
                     ]
 
-                p = f"{project_name}.{godot_platform}.{godot_target}.{godot_arch}.generated.props"
+                p = f"{project_name}.{redot_platform}.{redot_target}.{redot_arch}.generated.props"
                 imports += [
                     f'<Import Project="$(MSBuildProjectDirectory)\\{p}" Condition="Exists(\'$(MSBuildProjectDirectory)\\{p}\')"/>'
                 ]
 
-                section1 += [f"{godot_target}|{sln_plat} = {godot_target}|{sln_plat}"]
+                section1 += [f"{redot_target}|{sln_plat} = {redot_target}|{sln_plat}"]
 
                 section2 += [
-                    f"{{{proj_uuid}}}.{godot_target}|{sln_plat}.ActiveCfg = {godot_target}|{proj_plat}",
-                    f"{{{proj_uuid}}}.{godot_target}|{sln_plat}.Build.0 = {godot_target}|{proj_plat}",
+                    f"{{{proj_uuid}}}.{redot_target}|{sln_plat}.ActiveCfg = {redot_target}|{proj_plat}",
+                    f"{{{proj_uuid}}}.{redot_target}|{sln_plat}.Build.0 = {redot_target}|{proj_plat}",
                 ]
 
     # Add an extra import for a local user props file at the end, so users can add more overrides.
@@ -1439,9 +1533,11 @@ def generate_copyright_header(filename: str) -> str:
 /*  %s*/
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                                (see REDOT_AUTHORS.md). */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */

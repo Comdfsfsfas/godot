@@ -2,9 +2,11 @@
 /*  GodotGame.kt                                                          */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -28,7 +30,7 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-package org.godotengine.editor
+package org.redotengine.editor
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -40,9 +42,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.annotation.CallSuper
-import org.godotengine.godot.GodotLib
-import org.godotengine.godot.utils.PermissionsUtil
-import org.godotengine.godot.utils.ProcessPhoenix
+import org.redotengine.godot.GodotLib
+import org.redotengine.godot.utils.PermissionsUtil
+import org.redotengine.godot.utils.ProcessPhoenix
 
 /**
  * Drives the 'run project' window of the Godot Editor.

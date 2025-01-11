@@ -2,9 +2,11 @@
 /*  rid_owner.h                                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -417,8 +419,8 @@ public:
 		}
 	}
 
-	void set_description(const char *p_description) {
-		description = p_description;
+	void set_description(const char *p_descrption) {
+		description = p_descrption;
 	}
 
 	RID_Alloc(uint32_t p_target_chunk_byte_size = 65536, uint32_t p_maximum_number_of_elements = 262144) {
@@ -515,8 +517,8 @@ public:
 		alloc.fill_owned_buffer(p_rid_buffer);
 	}
 
-	void set_description(const char *p_description) {
-		alloc.set_description(p_description);
+	void set_description(const char *p_descrption) {
+		alloc.set_description(p_descrption);
 	}
 
 	RID_PtrOwner(uint32_t p_target_chunk_byte_size = 65536, uint32_t p_maximum_number_of_elements = 262144) :
@@ -570,8 +572,8 @@ public:
 		alloc.fill_owned_buffer(p_rid_buffer);
 	}
 
-	void set_description(const char *p_description) {
-		alloc.set_description(p_description);
+	void set_description(const char *p_descrption) {
+		alloc.set_description(p_descrption);
 	}
 	RID_Owner(uint32_t p_target_chunk_byte_size = 65536, uint32_t p_maximum_number_of_elements = 262144) :
 			alloc(p_target_chunk_byte_size, p_maximum_number_of_elements) {}

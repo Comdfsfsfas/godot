@@ -2,9 +2,11 @@
 /*  animation.cpp                                                         */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -948,50 +950,50 @@ void Animation::remove_track(int p_track) {
 		case TYPE_POSITION_3D: {
 			PositionTrack *tt = static_cast<PositionTrack *>(t);
 			ERR_FAIL_COND_MSG(tt->compressed_track >= 0, "Compressed tracks can't be manually removed. Call clear() to get rid of compression first.");
-			tt->positions.clear();
+			_clear(tt->positions);
 
 		} break;
 		case TYPE_ROTATION_3D: {
 			RotationTrack *rt = static_cast<RotationTrack *>(t);
 			ERR_FAIL_COND_MSG(rt->compressed_track >= 0, "Compressed tracks can't be manually removed. Call clear() to get rid of compression first.");
-			rt->rotations.clear();
+			_clear(rt->rotations);
 
 		} break;
 		case TYPE_SCALE_3D: {
 			ScaleTrack *st = static_cast<ScaleTrack *>(t);
 			ERR_FAIL_COND_MSG(st->compressed_track >= 0, "Compressed tracks can't be manually removed. Call clear() to get rid of compression first.");
-			st->scales.clear();
+			_clear(st->scales);
 
 		} break;
 		case TYPE_BLEND_SHAPE: {
 			BlendShapeTrack *bst = static_cast<BlendShapeTrack *>(t);
 			ERR_FAIL_COND_MSG(bst->compressed_track >= 0, "Compressed tracks can't be manually removed. Call clear() to get rid of compression first.");
-			bst->blend_shapes.clear();
+			_clear(bst->blend_shapes);
 
 		} break;
 		case TYPE_VALUE: {
 			ValueTrack *vt = static_cast<ValueTrack *>(t);
-			vt->values.clear();
+			_clear(vt->values);
 
 		} break;
 		case TYPE_METHOD: {
 			MethodTrack *mt = static_cast<MethodTrack *>(t);
-			mt->methods.clear();
+			_clear(mt->methods);
 
 		} break;
 		case TYPE_BEZIER: {
 			BezierTrack *bz = static_cast<BezierTrack *>(t);
-			bz->values.clear();
+			_clear(bz->values);
 
 		} break;
 		case TYPE_AUDIO: {
 			AudioTrack *ad = static_cast<AudioTrack *>(t);
-			ad->values.clear();
+			_clear(ad->values);
 
 		} break;
 		case TYPE_ANIMATION: {
 			AnimationTrack *an = static_cast<AnimationTrack *>(t);
-			an->values.clear();
+			_clear(an->values);
 
 		} break;
 	}
@@ -1135,6 +1137,11 @@ int Animation::_marker_insert(double p_time, Vector<MarkerKey> &p_keys, const Ma
 	}
 
 	return -1;
+}
+
+template <typename T>
+void Animation::_clear(T &p_keys) {
+	p_keys.clear();
 }
 
 ////

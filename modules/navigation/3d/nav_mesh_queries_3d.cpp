@@ -2,9 +2,11 @@
 /*  nav_mesh_queries_3d.cpp                                               */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -314,7 +316,7 @@ void NavMeshQueries3D::_query_task_build_path_corridor(NavMeshPathQueryTask3D &p
 								owner->get_travel_cost();
 						neighbor_poly.entry = new_entry;
 
-						if (neighbor_poly.traversable_poly_index != traversable_polys.INVALID_INDEX) {
+						if (neighbor_poly.poly != nullptr) {
 							traversable_polys.shift(neighbor_poly.traversable_poly_index);
 						} else {
 							neighbor_poly.poly = connection.polygon;

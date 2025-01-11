@@ -2,9 +2,11 @@
 /*  xr_interface.cpp                                                      */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -192,10 +194,6 @@ RID XRInterface::get_velocity_depth_texture() {
 
 Size2i XRInterface::get_velocity_target_size() {
 	return Size2i();
-}
-
-Rect2i XRInterface::get_render_region() {
-	return Rect2i();
 }
 
 PackedStringArray XRInterface::get_suggested_tracker_names() const {

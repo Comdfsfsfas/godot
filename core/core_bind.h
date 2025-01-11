@@ -2,9 +2,11 @@
 /*  core_bind.h                                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -560,9 +562,12 @@ public:
 	MainLoop *get_main_loop() const;
 
 	Dictionary get_version_info() const;
+	Dictionary get_godot_compatible_version_info() const;
 	Dictionary get_author_info() const;
+	Dictionary get_godot_author_info() const;
 	TypedArray<Dictionary> get_copyright_info() const;
 	Dictionary get_donor_info() const;
+	Dictionary get_godot_donor_info() const;
 	Dictionary get_license_info() const;
 	String get_license_text() const;
 

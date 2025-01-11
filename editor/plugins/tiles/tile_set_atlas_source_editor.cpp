@@ -2,9 +2,11 @@
 /*  tile_set_atlas_source_editor.cpp                                      */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -439,10 +441,10 @@ void TileSetAtlasSourceEditor::AtlasTileProxyObject::_get_property_list(List<Pro
 
 	// Get the list of properties common to all tiles (similar to what's done in MultiNodeEdit).
 	struct PropertyId {
-		int occurrence_id = 0;
+		int occurence_id = 0;
 		String property;
 		bool operator<(const PropertyId &p_other) const {
-			return occurrence_id == p_other.occurrence_id ? property < p_other.property : occurrence_id < p_other.occurrence_id;
+			return occurence_id == p_other.occurence_id ? property < p_other.property : occurence_id < p_other.occurence_id;
 		}
 	};
 	struct PLData {

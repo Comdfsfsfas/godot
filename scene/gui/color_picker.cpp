@@ -2,9 +2,11 @@
 /*  color_picker.cpp                                                      */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -161,19 +163,13 @@ void ColorPicker::_notification(int p_what) {
 			Vector2 ofs = ds->mouse_get_position();
 			picker_window->set_position(ofs - Vector2(28, 28));
 
-			Color c = DisplayServer::get_singleton()->screen_get_pixel(ofs);
+			Color c = DisplayServer::get_singleton()->screen_get_pixel(DisplayServer::get_singleton()->mouse_get_position());
 
 			picker_preview_style_box_color->set_bg_color(c);
 			picker_preview_style_box->set_bg_color(c.get_luminance() < 0.5 ? Color(1.0f, 1.0f, 1.0f) : Color(0.0f, 0.0f, 0.0f));
 
-			if (ds->has_feature(DisplayServer::FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE)) {
-				Ref<Image> zoom_preview_img = ds->screen_get_image_rect(Rect2i(ofs.x - 8, ofs.y - 8, 17, 17));
-				picker_window->set_position(ofs - Vector2(28, 28));
-				picker_texture_zoom->set_texture(ImageTexture::create_from_image(zoom_preview_img));
-			} else {
-				Size2i screen_size = ds->screen_get_size();
-				picker_window->set_position(ofs + Vector2(ofs.x < screen_size.width / 2 ? 8 : -36, ofs.y < screen_size.height / 2 ? 8 : -36));
-			}
+			Ref<Image> zoom_preview_img = ds->screen_get_image_rect(Rect2i(ofs.x - 8, ofs.y - 8, 17, 17));
+			picker_texture_zoom->set_texture(ImageTexture::create_from_image(zoom_preview_img));
 
 			set_pick_color(c);
 		}
@@ -668,6 +664,7 @@ void ColorPicker::_update_color(bool p_update_sliders) {
 		float spinbox_arrow_step = modes[current_mode]->get_spinbox_arrow_step();
 		for (int i = 0; i < current_slider_count; i++) {
 			sliders[i]->set_max(modes[current_mode]->get_slider_max(i));
+			sliders[i]->set_allow_greater(modes[current_mode]->can_allow_greater());
 			sliders[i]->set_step(step);
 			values[i]->set_custom_arrow_step(spinbox_arrow_step);
 			sliders[i]->set_value(modes[current_mode]->get_slider_value(i));
@@ -1252,6 +1249,9 @@ void ColorPicker::_update_text_value() {
 }
 
 void ColorPicker::_sample_input(const Ref<InputEvent> &p_event) {
+	if (!display_old_color) {
+		return;
+	}
 	const Ref<InputEventMouseButton> mb = p_event;
 	if (mb.is_valid() && mb->is_pressed() && mb->get_button_index() == MouseButton::LEFT) {
 		const Rect2 rect_old = Rect2(Point2(), Size2(sample->get_size().width * 0.5, sample->get_size().height * 0.95));
@@ -1304,7 +1304,7 @@ void ColorPicker::_sample_draw() {
 
 	if (color.r > 1 || color.g > 1 || color.b > 1) {
 		// Draw an indicator to denote that the new color is "overbright" and can't be displayed accurately in the preview.
-		sample->draw_texture(theme_cache.overbright_indicator, Point2(uv_edit->get_size().width * 0.5, 0));
+		sample->draw_texture(theme_cache.overbright_indicator, Point2(display_old_color ? sample->get_size().width * 0.5 : 0, 0));
 	}
 }
 
@@ -1316,16 +1316,13 @@ void ColorPicker::_hsv_draw(int p_which, Control *c) {
 	PickerShapeType actual_shape = _get_actual_shape();
 	if (p_which == 0) {
 		Vector<Point2> points;
-		Vector<Color> colors;
-		Vector<Color> colors2;
 		Color col = color;
 		Vector2 center = c->get_size() / 2.0;
 
-		switch (actual_shape) {
-			case SHAPE_HSV_WHEEL: {
-				points.resize(4);
-				colors.resize(4);
-				colors2.resize(4);
+		if (current_shape == SHAPE_HSV_RECTANGLE || current_shape == SHAPE_HSV_WHEEL) {
+			points.resize(4);
+			Vector<Color> colors2;
+			if (current_shape == SHAPE_HSV_WHEEL) {
 				real_t ring_radius_x = Math_SQRT12 * c->get_size().width * 0.42;
 				real_t ring_radius_y = Math_SQRT12 * c->get_size().height * 0.42;
 
@@ -1333,52 +1330,30 @@ void ColorPicker::_hsv_draw(int p_which, Control *c) {
 				points.set(1, center + Vector2(ring_radius_x, -ring_radius_y));
 				points.set(2, center + Vector2(ring_radius_x, ring_radius_y));
 				points.set(3, center + Vector2(-ring_radius_x, ring_radius_y));
-				colors.set(0, Color(1, 1, 1, 1));
-				colors.set(1, Color(1, 1, 1, 1));
-				colors.set(2, Color(0, 0, 0, 1));
-				colors.set(3, Color(0, 0, 0, 1));
-				c->draw_polygon(points, colors);
-
-				col.set_hsv(h, 1, 1);
-				col.a = 0;
-				colors2.set(0, col);
-				col.a = 1;
-				colors2.set(1, col);
-				col.set_hsv(h, 1, 0);
-				colors2.set(2, col);
-				col.a = 0;
-				colors2.set(3, col);
-				c->draw_polygon(points, colors2);
-				break;
-			}
-			case SHAPE_HSV_RECTANGLE: {
-				points.resize(4);
-				colors.resize(4);
-				colors2.resize(4);
+			} else {
 				points.set(0, Vector2());
 				points.set(1, Vector2(c->get_size().x, 0));
 				points.set(2, c->get_size());
 				points.set(3, Vector2(0, c->get_size().y));
-				colors.set(0, Color(1, 1, 1, 1));
-				colors.set(1, Color(1, 1, 1, 1));
-				colors.set(2, Color(0, 0, 0, 1));
-				colors.set(3, Color(0, 0, 0, 1));
-				c->draw_polygon(points, colors);
-				col = color;
-				col.set_hsv(h, 1, 1);
-				col.a = 0;
-				colors2.set(0, col);
-				col.a = 1;
-				colors2.set(1, col);
-				col.set_hsv(h, 1, 0);
-				colors2.set(2, col);
-				col.a = 0;
-				colors2.set(3, col);
-				c->draw_polygon(points, colors2);
-				break;
 			}
-			default: {
-			}
+			Vector<Color> colors = {
+				Color(1, 1, 1, 1),
+				Color(1, 1, 1, 1),
+				Color(0, 0, 0, 1),
+				Color(0, 0, 0, 1)
+			};
+			c->draw_polygon(points, colors);
+
+			col.set_hsv(h, 1, 1);
+			col.a = 0;
+			colors2.append(col);
+			col.a = 1;
+			colors2.append(col);
+			col.set_hsv(h, 1, 0);
+			colors2.append(col);
+			col.a = 0;
+			colors2.append(col);
+			c->draw_polygon(points, colors2);
 		}
 
 		int x;
@@ -1404,14 +1379,15 @@ void ColorPicker::_hsv_draw(int p_which, Control *c) {
 
 		col.set_hsv(h, 1, 1);
 		if (actual_shape == SHAPE_HSV_WHEEL) {
-			points.resize(4);
-			double h1 = h - (0.5 / 360);
-			double h2 = h + (0.5 / 360);
-			points.set(0, Point2(center.x + (center.x * Math::cos(h1 * Math_TAU)), center.y + (center.y * Math::sin(h1 * Math_TAU))));
-			points.set(1, Point2(center.x + (center.x * Math::cos(h1 * Math_TAU) * 0.84), center.y + (center.y * Math::sin(h1 * Math_TAU) * 0.84)));
-			points.set(2, Point2(center.x + (center.x * Math::cos(h2 * Math_TAU)), center.y + (center.y * Math::sin(h2 * Math_TAU))));
-			points.set(3, Point2(center.x + (center.x * Math::cos(h2 * Math_TAU) * 0.84), center.y + (center.y * Math::sin(h2 * Math_TAU) * 0.84)));
-			c->draw_multiline(points, col.inverted());
+			const real_t near_wheel_radius_multiplier = 0.8375;
+			const real_t wheel_radis_center_multipler = near_wheel_radius_multiplier + (1.0 - near_wheel_radius_multiplier) / 2;
+			real_t wheel_x = center.x + (center.x * Math::cos(h * Math_TAU) * wheel_radis_center_multipler);
+			real_t wheel_y = center.y + (center.y * Math::sin(h * Math_TAU) * wheel_radis_center_multipler);
+			Point2 wheel_picker_pos = Point2(wheel_x, wheel_y);
+
+			c->draw_set_transform(wheel_picker_pos, center.angle_to_point(wheel_picker_pos), Size2(1, 1));
+			c->draw_texture(theme_cache.wheel_picker_cursor, Point2(-theme_cache.wheel_picker_cursor->get_width() / 2, -theme_cache.wheel_picker_cursor->get_height() / 2));
+			c->draw_set_transform(Point2(), 0, Size2(1, 1));
 		}
 
 	} else if (p_which == 1) {
@@ -1714,15 +1690,11 @@ void ColorPicker::_pick_button_pressed() {
 
 	if (!picker_window) {
 		picker_window = memnew(Popup);
-		bool has_feature_exclude_from_capture = DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE);
-		if (!has_feature_exclude_from_capture) {
-			picker_window->set_size(Vector2i(28, 28));
-		} else {
-			picker_window->set_size(Vector2i(55, 72));
-			picker_window->set_flag(Window::FLAG_EXCLUDE_FROM_CAPTURE, true); // Only supported on MacOS and Windows.
-		}
+		picker_window->set_size(Vector2i(55, 72));
 		picker_window->connect(SceneStringName(visibility_changed), callable_mp(this, &ColorPicker::_pick_finished));
 		picker_window->connect(SceneStringName(window_input), callable_mp(this, &ColorPicker::_target_gui_input));
+
+		picker_window->set_flag(Window::FLAG_EXCLUDE_FROM_CAPTURE, true);
 
 		picker_preview = memnew(Panel);
 		picker_preview->set_mouse_filter(MOUSE_FILTER_IGNORE);
@@ -1731,23 +1703,16 @@ void ColorPicker::_pick_button_pressed() {
 
 		picker_preview_color = memnew(Panel);
 		picker_preview_color->set_mouse_filter(MOUSE_FILTER_IGNORE);
-		if (!has_feature_exclude_from_capture) {
-			picker_preview_color->set_size(Vector2i(24, 24));
-			picker_preview_color->set_position(Vector2i(2, 2));
-		} else {
-			picker_preview_color->set_size(Vector2i(51, 15));
-			picker_preview_color->set_position(Vector2i(2, 55));
-		}
+		picker_preview_color->set_size(Vector2i(51, 15));
+		picker_preview_color->set_position(Vector2i(2, 55));
 		picker_preview->add_child(picker_preview_color);
 
-		if (has_feature_exclude_from_capture) {
-			picker_texture_zoom = memnew(TextureRect);
-			picker_texture_zoom->set_mouse_filter(MOUSE_FILTER_IGNORE);
-			picker_texture_zoom->set_custom_minimum_size(Vector2i(51, 51));
-			picker_texture_zoom->set_position(Vector2i(2, 2));
-			picker_texture_zoom->set_texture_filter(CanvasItem::TEXTURE_FILTER_NEAREST);
-			picker_preview->add_child(picker_texture_zoom);
-		}
+		picker_texture_zoom = memnew(TextureRect);
+		picker_texture_zoom->set_mouse_filter(MOUSE_FILTER_IGNORE);
+		picker_texture_zoom->set_custom_minimum_size(Vector2i(51, 51));
+		picker_texture_zoom->set_position(Vector2i(2, 2));
+		picker_texture_zoom->set_texture_filter(CanvasItem::TEXTURE_FILTER_NEAREST);
+		picker_preview->add_child(picker_texture_zoom);
 
 		picker_preview_style_box.instantiate();
 		picker_preview->add_theme_style_override(SceneStringName(panel), picker_preview_style_box);
@@ -1782,7 +1747,6 @@ void ColorPicker::_pick_finished() {
 	}
 	is_picking_color = false;
 	set_process_internal(false);
-	picker_window->hide();
 }
 
 void ColorPicker::_update_menu_items() {
@@ -1903,35 +1867,23 @@ void ColorPicker::_pick_button_pressed_legacy() {
 		picker_window->add_child(picker_texture_rect);
 		picker_texture_rect->connect(SceneStringName(gui_input), callable_mp(this, &ColorPicker::_picker_texture_input));
 
-		bool has_feature_exclude_from_capture = DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE);
 		picker_preview = memnew(Panel);
 		picker_preview->set_mouse_filter(MOUSE_FILTER_IGNORE);
-		if (!has_feature_exclude_from_capture) {
-			picker_preview->set_size(Vector2i(28, 28));
-		} else {
-			picker_preview->set_size(Vector2i(55, 72));
-		}
+		picker_preview->set_size(Vector2i(55, 72));
 		picker_window->add_child(picker_preview);
 
 		picker_preview_color = memnew(Panel);
 		picker_preview_color->set_mouse_filter(MOUSE_FILTER_IGNORE);
-		if (!has_feature_exclude_from_capture) {
-			picker_preview_color->set_size(Vector2i(24, 24));
-			picker_preview_color->set_position(Vector2i(2, 2));
-		} else {
-			picker_preview_color->set_size(Vector2i(51, 15));
-			picker_preview_color->set_position(Vector2i(2, 55));
-		}
+		picker_preview_color->set_size(Vector2i(51, 15));
+		picker_preview_color->set_position(Vector2i(2, 55));
 		picker_preview->add_child(picker_preview_color);
 
-		if (has_feature_exclude_from_capture) {
-			picker_texture_zoom = memnew(TextureRect);
-			picker_texture_zoom->set_mouse_filter(MOUSE_FILTER_IGNORE);
-			picker_texture_zoom->set_custom_minimum_size(Vector2i(51, 51));
-			picker_texture_zoom->set_position(Vector2i(2, 2));
-			picker_texture_zoom->set_texture_filter(CanvasItem::TEXTURE_FILTER_NEAREST);
-			picker_preview->add_child(picker_texture_zoom);
-		}
+		picker_texture_zoom = memnew(TextureRect);
+		picker_texture_zoom->set_mouse_filter(MOUSE_FILTER_IGNORE);
+		picker_texture_zoom->set_custom_minimum_size(Vector2i(51, 51));
+		picker_texture_zoom->set_position(Vector2i(2, 2));
+		picker_texture_zoom->set_texture_filter(CanvasItem::TEXTURE_FILTER_NEAREST);
+		picker_preview->add_child(picker_texture_zoom);
 
 		picker_preview_style_box.instantiate();
 		picker_preview->add_theme_style_override(SceneStringName(panel), picker_preview_style_box);
@@ -2108,6 +2060,10 @@ bool ColorPicker::is_hex_visible() const {
 void ColorPicker::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_pick_color", "color"), &ColorPicker::set_pick_color);
 	ClassDB::bind_method(D_METHOD("get_pick_color"), &ColorPicker::get_pick_color);
+	ClassDB::bind_method(D_METHOD("set_old_color", "color"), &ColorPicker::set_old_color);
+	ClassDB::bind_method(D_METHOD("get_old_color"), &ColorPicker::get_old_color);
+	ClassDB::bind_method(D_METHOD("set_display_old_color", "display"), &ColorPicker::set_display_old_color);
+	ClassDB::bind_method(D_METHOD("is_displaying_old_color"), &ColorPicker::is_displaying_old_color);
 	ClassDB::bind_method(D_METHOD("set_deferred_mode", "mode"), &ColorPicker::set_deferred_mode);
 	ClassDB::bind_method(D_METHOD("is_deferred_mode"), &ColorPicker::is_deferred_mode);
 	ClassDB::bind_method(D_METHOD("set_color_mode", "color_mode"), &ColorPicker::set_color_mode);
@@ -2136,6 +2092,8 @@ void ColorPicker::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_picker_shape"), &ColorPicker::get_picker_shape);
 
 	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "color"), "set_pick_color", "get_pick_color");
+	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "old_color"), "set_old_color", "get_old_color");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "display_old_color"), "set_display_old_color", "is_displaying_old_color");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "edit_alpha"), "set_edit_alpha", "is_editing_alpha");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "color_mode", PROPERTY_HINT_ENUM, "RGB,HSV,RAW,OKHSL"), "set_color_mode", "get_color_mode");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "deferred_mode"), "set_deferred_mode", "is_deferred_mode");
@@ -2187,6 +2145,7 @@ void ColorPicker::_bind_methods() {
 	BIND_THEME_ITEM(Theme::DATA_TYPE_ICON, ColorPicker, sample_revert);
 	BIND_THEME_ITEM(Theme::DATA_TYPE_ICON, ColorPicker, overbright_indicator);
 	BIND_THEME_ITEM(Theme::DATA_TYPE_ICON, ColorPicker, picker_cursor);
+	BIND_THEME_ITEM(Theme::DATA_TYPE_ICON, ColorPicker, wheel_picker_cursor);
 	BIND_THEME_ITEM(Theme::DATA_TYPE_ICON, ColorPicker, color_hue);
 
 	BIND_THEME_ITEM_EXT(Theme::DATA_TYPE_STYLEBOX, ColorPicker, mode_button_normal, "tab_unselected", "TabContainer");
@@ -2283,17 +2242,10 @@ ColorPicker::ColorPicker() {
 	mode_popup->set_item_checked(current_mode, true);
 	mode_popup->set_item_checked(MODE_MAX + 1, true);
 	mode_popup->connect(SceneStringName(id_pressed), callable_mp(this, &ColorPicker::_set_mode_popup_value));
-	VBoxContainer *vbl = memnew(VBoxContainer);
-	real_vbox->add_child(vbl);
-
-	VBoxContainer *vbr = memnew(VBoxContainer);
-
-	real_vbox->add_child(vbr);
-	vbr->set_h_size_flags(SIZE_EXPAND_FILL);
 
 	slider_gc = memnew(GridContainer);
 
-	vbr->add_child(slider_gc);
+	real_vbox->add_child(slider_gc);
 	slider_gc->set_h_size_flags(SIZE_EXPAND_FILL);
 	slider_gc->set_columns(3);
 
@@ -2305,7 +2257,7 @@ ColorPicker::ColorPicker() {
 
 	hex_hbc = memnew(HBoxContainer);
 	hex_hbc->set_alignment(ALIGNMENT_BEGIN);
-	vbr->add_child(hex_hbc);
+	real_vbox->add_child(hex_hbc);
 
 	hex_hbc->add_child(memnew(Label(ETR("Hex"))));
 

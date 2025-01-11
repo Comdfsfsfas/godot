@@ -2,9 +2,11 @@
 /*  test_node_path.h                                                      */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -169,31 +171,28 @@ TEST_CASE("[NodePath] Empty path") {
 }
 
 TEST_CASE("[NodePath] Slice") {
-	const NodePath node_path_relative = NodePath("Parent/Child:prop:subprop");
+	const NodePath node_path_relative = NodePath("Parent/Child:prop");
 	const NodePath node_path_absolute = NodePath("/root/Parent/Child:prop");
 	CHECK_MESSAGE(
 			node_path_relative.slice(0, 2) == NodePath("Parent/Child"),
 			"The slice lower bound should be inclusive and the slice upper bound should be exclusive.");
 	CHECK_MESSAGE(
-			node_path_relative.slice(3) == NodePath(":subprop"),
-			"Slicing on the last index (length - 1) should return the last entry.");
-	CHECK_MESSAGE(
-			node_path_relative.slice(1) == NodePath("Child:prop:subprop"),
-			"Slicing without upper bound should return remaining entries after index.");
+			node_path_relative.slice(3) == NodePath(":prop"),
+			"Slicing on the length of the path should return the last entry.");
 	CHECK_MESSAGE(
 			node_path_relative.slice(1, 3) == NodePath("Child:prop"),
 			"Slicing should include names and subnames.");
 	CHECK_MESSAGE(
-			node_path_relative.slice(-1) == NodePath(":subprop"),
+			node_path_relative.slice(-1) == NodePath(":prop"),
 			"Slicing on -1 should return the last entry.");
 	CHECK_MESSAGE(
-			node_path_relative.slice(0, -1) == NodePath("Parent/Child:prop"),
+			node_path_relative.slice(0, -1) == NodePath("Parent/Child"),
 			"Slicing up to -1 should include the second-to-last entry.");
 	CHECK_MESSAGE(
-			node_path_relative.slice(-2, -1) == NodePath(":prop"),
+			node_path_relative.slice(-2, -1) == NodePath("Child"),
 			"Slicing from negative to negative should treat lower bound as inclusive and upper bound as exclusive.");
 	CHECK_MESSAGE(
-			node_path_relative.slice(0, 10) == NodePath("Parent/Child:prop:subprop"),
+			node_path_relative.slice(0, 10) == NodePath("Parent/Child:prop"),
 			"Slicing past the length of the path should work like slicing up to the last entry.");
 	CHECK_MESSAGE(
 			node_path_relative.slice(-10, 2) == NodePath("Parent/Child"),

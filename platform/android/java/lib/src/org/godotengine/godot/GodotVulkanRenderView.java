@@ -2,9 +2,11 @@
 /*  GodotVulkanRenderView.java                                            */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -28,11 +30,7 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-package org.godotengine.godot;
-
-import org.godotengine.godot.input.GodotInputHandler;
-import org.godotengine.godot.vulkan.VkRenderer;
-import org.godotengine.godot.vulkan.VkSurfaceView;
+package org.redotengine.godot;
 
 import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
@@ -49,6 +47,10 @@ import android.view.SurfaceView;
 import androidx.annotation.Keep;
 
 import java.io.InputStream;
+
+import org.redotengine.godot.input.GodotInputHandler;
+import org.redotengine.godot.vulkan.VkRenderer;
+import org.redotengine.godot.vulkan.VkSurfaceView;
 
 class GodotVulkanRenderView extends VkSurfaceView implements GodotRenderView {
 	private final GodotHost host;

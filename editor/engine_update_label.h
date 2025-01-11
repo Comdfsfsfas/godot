@@ -2,9 +2,11 @@
 /*  engine_update_label.h                                                 */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -79,6 +81,8 @@ private:
 	UpdateStatus status = UpdateStatus::NONE;
 	bool checked_update = false;
 	String available_newer_version;
+	uint64_t ratelimit_reset = UINT64_MAX;
+	uint64_t ratelimit_remaining = UINT64_MAX;
 
 	bool _can_check_updates() const;
 	void _check_update();

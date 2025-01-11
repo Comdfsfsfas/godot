@@ -2,9 +2,11 @@
 /*  sky.cpp                                                               */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -1187,17 +1189,6 @@ void SkyRD::setup_sky(const RenderDataRD *p_render_data, const Size2i p_screen_s
 		projection[2].y = -projection[2].y;
 	}
 
-	float custom_fov = RendererSceneRenderRD::get_singleton()->environment_get_sky_custom_fov(p_render_data->environment);
-
-	if (custom_fov && sky_scene_state.view_count == 1) {
-		// With custom fov we don't support stereo...
-		float near_plane = projection.get_z_near();
-		float far_plane = projection.get_z_far();
-		float aspect = projection.get_aspect();
-
-		projection.set_perspective(custom_fov, aspect, near_plane, far_plane);
-	}
-
 	sky_scene_state.cam_projection = correction * projection;
 
 	// Our info in our UBO is only used if we're rendering stereo.
@@ -1461,8 +1452,19 @@ void SkyRD::update_res_buffers(Ref<RenderSceneBuffersRD> p_render_buffers, RID p
 	Basis sky_transform = RendererSceneRenderRD::get_singleton()->environment_get_sky_orientation(p_env);
 	sky_transform.invert();
 
+	float custom_fov = RendererSceneRenderRD::get_singleton()->environment_get_sky_custom_fov(p_env);
+
 	// Camera
 	Projection projection = sky_scene_state.cam_projection;
+
+	if (custom_fov && sky_scene_state.view_count == 1) {
+		// With custom fov we don't support stereo...
+		float near_plane = projection.get_z_near();
+		float far_plane = projection.get_z_far();
+		float aspect = projection.get_aspect();
+
+		projection.set_perspective(custom_fov, aspect, near_plane, far_plane);
+	}
 
 	sky_transform = sky_transform * sky_scene_state.cam_transform.basis;
 
@@ -1551,8 +1553,19 @@ void SkyRD::draw_sky(RD::DrawListID p_draw_list, Ref<RenderSceneBuffersRD> p_ren
 	Basis sky_transform = RendererSceneRenderRD::get_singleton()->environment_get_sky_orientation(p_env);
 	sky_transform.invert();
 
+	float custom_fov = RendererSceneRenderRD::get_singleton()->environment_get_sky_custom_fov(p_env);
+
 	// Camera
 	Projection projection = sky_scene_state.cam_projection;
+
+	if (custom_fov && sky_scene_state.view_count == 1) {
+		// With custom fov we don't support stereo...
+		float near_plane = projection.get_z_near();
+		float far_plane = projection.get_z_far();
+		float aspect = projection.get_aspect();
+
+		projection.set_perspective(custom_fov, aspect, near_plane, far_plane);
+	}
 
 	sky_transform = sky_transform * sky_scene_state.cam_transform.basis;
 

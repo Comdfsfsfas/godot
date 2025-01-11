@@ -2,9 +2,11 @@
 /*  animation_blend_space_2d.cpp                                          */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -316,7 +318,7 @@ void AnimationNodeBlendSpace2D::_set_triangles(const Vector<int> &p_triangles) {
 
 Vector<int> AnimationNodeBlendSpace2D::_get_triangles() const {
 	Vector<int> t;
-	if (auto_triangles && triangles_dirty) {
+	if (auto_triangles && trianges_dirty) {
 		return t;
 	}
 
@@ -330,20 +332,20 @@ Vector<int> AnimationNodeBlendSpace2D::_get_triangles() const {
 }
 
 void AnimationNodeBlendSpace2D::_queue_auto_triangles() {
-	if (!auto_triangles || triangles_dirty) {
+	if (!auto_triangles || trianges_dirty) {
 		return;
 	}
 
-	triangles_dirty = true;
+	trianges_dirty = true;
 	callable_mp(this, &AnimationNodeBlendSpace2D::_update_triangles).call_deferred();
 }
 
 void AnimationNodeBlendSpace2D::_update_triangles() {
-	if (!auto_triangles || !triangles_dirty) {
+	if (!auto_triangles || !trianges_dirty) {
 		return;
 	}
 
-	triangles_dirty = false;
+	trianges_dirty = false;
 	triangles.clear();
 	if (blend_points_used < 3) {
 		emit_signal(SNAME("triangles_updated"));

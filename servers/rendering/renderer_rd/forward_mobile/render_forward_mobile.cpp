@@ -2,9 +2,11 @@
 /*  render_forward_mobile.cpp                                             */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -1099,7 +1101,7 @@ void RenderForwardMobile::_render_scene(RenderDataRD *p_render_data, const Color
 			}
 		}
 
-		RD::DrawListID draw_list = RD::get_singleton()->draw_list_begin(framebuffer, load_color ? RD::DRAW_CLEAR_DEPTH : (RD::DRAW_CLEAR_COLOR_0 | RD::DRAW_CLEAR_DEPTH), c, 0.0f, 0, p_render_data->render_region, breadcrumb);
+		RD::DrawListID draw_list = RD::get_singleton()->draw_list_begin(framebuffer, load_color ? RD::DRAW_CLEAR_DEPTH : (RD::DRAW_CLEAR_COLOR_0 | RD::DRAW_CLEAR_DEPTH), c, 0.0f, 0, Rect2(), breadcrumb);
 		RD::FramebufferFormatID fb_format = RD::get_singleton()->framebuffer_get_format(framebuffer);
 
 		if (copy_canvas) {
@@ -1196,7 +1198,7 @@ void RenderForwardMobile::_render_scene(RenderDataRD *p_render_data, const Color
 				render_list_params.framebuffer_format = fb_format;
 				render_list_params.subpass = RD::get_singleton()->draw_list_get_current_pass(); // Should now always be 0.
 
-				draw_list = RD::get_singleton()->draw_list_begin(framebuffer, RD::DRAW_DEFAULT_ALL, Vector<Color>(), 1.0f, 0, p_render_data->render_region, breadcrumb);
+				draw_list = RD::get_singleton()->draw_list_begin(framebuffer, RD::DRAW_DEFAULT_ALL, Vector<Color>(), 1.0f, 0, Rect2(), breadcrumb);
 				_render_list(draw_list, fb_format, &render_list_params, 0, render_list_params.element_count);
 				RD::get_singleton()->draw_list_end();
 

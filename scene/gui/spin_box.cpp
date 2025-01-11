@@ -2,9 +2,11 @@
 /*  spin_box.cpp                                                          */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -622,7 +624,6 @@ void SpinBox::_bind_methods() {
 
 SpinBox::SpinBox() {
 	line_edit = memnew(LineEdit);
-	line_edit->set_emoji_menu_enabled(false);
 	add_child(line_edit, false, INTERNAL_MODE_FRONT);
 
 	line_edit->set_theme_type_variation("SpinBoxInnerLineEdit");

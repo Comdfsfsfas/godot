@@ -2,9 +2,11 @@
 /*  rendering_server.cpp                                                  */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -2160,7 +2162,7 @@ void RenderingServer::fix_surface_compatibility(SurfaceData &p_surface, const St
 	}
 
 	if (warn_on_surface_upgrade) {
-		WARN_PRINT_ONCE_ED("At least one surface uses an old surface format and needs to be upgraded. The upgrade happens automatically at load time every time until the mesh is saved again or re-imported. Once saved (or re-imported), this mesh will be incompatible with earlier versions of Godot.");
+		WARN_PRINT_ONCE_ED("At least one surface uses an old surface format and needs to be upgraded. The upgrade happens automatically at load time every time until the mesh is saved again or re-imported. Once saved (or re-imported), this mesh will be incompatible with earlier versions of Redot.");
 
 		if (!p_path.is_empty()) {
 			WARN_PRINT("A surface of " + p_path + " uses an old surface format and needs to be upgraded.");
@@ -3016,7 +3018,7 @@ void RenderingServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("environment_set_bg_color", "env", "color"), &RenderingServer::environment_set_bg_color);
 	ClassDB::bind_method(D_METHOD("environment_set_bg_energy", "env", "multiplier", "exposure_value"), &RenderingServer::environment_set_bg_energy);
 	ClassDB::bind_method(D_METHOD("environment_set_canvas_max_layer", "env", "max_layer"), &RenderingServer::environment_set_canvas_max_layer);
-	ClassDB::bind_method(D_METHOD("environment_set_ambient_light", "env", "color", "ambient", "energy", "sky_contribution", "reflection_source"), &RenderingServer::environment_set_ambient_light, DEFVAL(RS::ENV_AMBIENT_SOURCE_BG), DEFVAL(1.0), DEFVAL(0.0), DEFVAL(RS::ENV_REFLECTION_SOURCE_BG));
+	ClassDB::bind_method(D_METHOD("environment_set_ambient_light", "env", "color", "ambient", "energy", "sky_contibution", "reflection_source"), &RenderingServer::environment_set_ambient_light, DEFVAL(RS::ENV_AMBIENT_SOURCE_BG), DEFVAL(1.0), DEFVAL(0.0), DEFVAL(RS::ENV_REFLECTION_SOURCE_BG));
 	ClassDB::bind_method(D_METHOD("environment_set_glow", "env", "enable", "levels", "intensity", "strength", "mix", "bloom_threshold", "blend_mode", "hdr_bleed_threshold", "hdr_bleed_scale", "hdr_luminance_cap", "glow_map_strength", "glow_map"), &RenderingServer::environment_set_glow);
 	ClassDB::bind_method(D_METHOD("environment_set_tonemap", "env", "tone_mapper", "exposure", "white"), &RenderingServer::environment_set_tonemap);
 	ClassDB::bind_method(D_METHOD("environment_set_adjustment", "env", "enable", "brightness", "contrast", "saturation", "use_1d_color_correction", "color_correction"), &RenderingServer::environment_set_adjustment);
@@ -3072,7 +3074,6 @@ void RenderingServer::_bind_methods() {
 	BIND_ENUM_CONSTANT(ENV_TONE_MAPPER_REINHARD);
 	BIND_ENUM_CONSTANT(ENV_TONE_MAPPER_FILMIC);
 	BIND_ENUM_CONSTANT(ENV_TONE_MAPPER_ACES);
-	BIND_ENUM_CONSTANT(ENV_TONE_MAPPER_AGX);
 
 	BIND_ENUM_CONSTANT(ENV_SSR_ROUGHNESS_QUALITY_DISABLED);
 	BIND_ENUM_CONSTANT(ENV_SSR_ROUGHNESS_QUALITY_LOW);
@@ -3580,7 +3581,7 @@ TypedArray<StringName> RenderingServer::_global_shader_parameter_get_list() cons
 }
 
 void RenderingServer::init() {
-	// These are overrides, even if they are false Godot will still
+	// These are overrides, even if they are false Redot will still
 	// import the texture formats that the host platform needs.
 	// See `const bool can_s3tc_bptc` in the resource importer.
 	GLOBAL_DEF_RST("rendering/textures/vram_compression/import_s3tc_bptc", false);

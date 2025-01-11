@@ -2,9 +2,11 @@
 /*  text_shader_editor.cpp                                                */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -729,9 +731,6 @@ void TextShaderEditor::_menu_option(int p_option) {
 		case HELP_DOCS: {
 			OS::get_singleton()->shell_open(vformat("%s/tutorials/shaders/shader_reference/index.html", VERSION_DOCS_URL));
 		} break;
-		case EDIT_EMOJI_AND_SYMBOL: {
-			code_editor->get_text_editor()->show_emoji_and_symbol_picker();
-		} break;
 	}
 	if (p_option != SEARCH_FIND && p_option != SEARCH_REPLACE && p_option != SEARCH_GOTO_LINE) {
 		callable_mp((Control *)code_editor->get_text_editor(), &Control::grab_focus).call_deferred();
@@ -1090,10 +1089,6 @@ void TextShaderEditor::_bookmark_item_pressed(int p_idx) {
 
 void TextShaderEditor::_make_context_menu(bool p_selection, Vector2 p_position) {
 	context_menu->clear();
-	if (DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_EMOJI_AND_SYMBOL_PICKER)) {
-		context_menu->add_item(TTR("Emoji & Symbols"), EDIT_EMOJI_AND_SYMBOL);
-		context_menu->add_separator();
-	}
 	if (p_selection) {
 		context_menu->add_shortcut(ED_GET_SHORTCUT("ui_cut"), EDIT_CUT);
 		context_menu->add_shortcut(ED_GET_SHORTCUT("ui_copy"), EDIT_COPY);

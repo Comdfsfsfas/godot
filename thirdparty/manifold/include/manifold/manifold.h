@@ -16,10 +16,6 @@
 #include <functional>
 #include <memory>
 
-#ifdef MANIFOLD_EXPORT
-#include <iostream>
-#endif
-
 #include "manifold/common.h"
 #include "manifold/vec_view.h"
 
@@ -379,10 +375,6 @@ class Manifold {
   ///@}
 
   struct Impl;
-
-#ifdef MANIFOLD_EXPORT
-  static Manifold ImportMeshGL64(std::istream& stream);
-#endif
 
  private:
   Manifold(std::shared_ptr<CsgNode> pNode_);

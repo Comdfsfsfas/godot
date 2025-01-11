@@ -2,9 +2,11 @@
 /*  tile_set_scenes_collection_source_editor.h                            */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -85,7 +87,7 @@ private:
 		static void _bind_methods();
 
 	public:
-		// Update the proxied object.
+		// Update the proxyed object.
 		void edit(TileSetScenesCollectionSource *p_tile_set_atlas_source, int p_scene_id);
 
 		SceneTileProxyObject(TileSetScenesCollectionSourceEditor *p_tiles_set_scenes_collection_source_editor) {

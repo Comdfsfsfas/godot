@@ -2,9 +2,11 @@
 /*  editor_scene_exporter_gltf_settings.cpp                               */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -181,7 +183,7 @@ void EditorSceneExporterGLTFSettings::set_copyright(const String &p_copyright) {
 void EditorSceneExporterGLTFSettings::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_copyright"), &EditorSceneExporterGLTFSettings::get_copyright);
 	ClassDB::bind_method(D_METHOD("set_copyright", "copyright"), &EditorSceneExporterGLTFSettings::set_copyright);
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "copyright", PROPERTY_HINT_PLACEHOLDER_TEXT, "Example: 2014 Godette"), "set_copyright", "get_copyright");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "copyright", PROPERTY_HINT_PLACEHOLDER_TEXT, "Example: 2014 Redot-chan"), "set_copyright", "get_copyright");
 
 	ClassDB::bind_method(D_METHOD("get_bake_fps"), &EditorSceneExporterGLTFSettings::get_bake_fps);
 	ClassDB::bind_method(D_METHOD("set_bake_fps", "bake_fps"), &EditorSceneExporterGLTFSettings::set_bake_fps);

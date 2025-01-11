@@ -2,9 +2,11 @@
 /*  test_gradient.h                                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -70,11 +72,11 @@ TEST_CASE("[Gradient] Default gradient") {
 TEST_CASE("[Gradient] Custom gradient (points specified in order)") {
 	// Red-yellow-green gradient (with overbright green).
 	Ref<Gradient> gradient = memnew(Gradient);
-	Vector<float> offsets = { 0.0, 0.5, 1.0 };
-	Vector<Color> colors = { Color(1, 0, 0), Color(1, 1, 0), Color(0, 2, 0) };
-
-	gradient->set_offsets(offsets);
-	gradient->set_colors(colors);
+	Vector<Gradient::Point> points;
+	points.push_back({ 0.0, Color(1, 0, 0) });
+	points.push_back({ 0.5, Color(1, 1, 0) });
+	points.push_back({ 1.0, Color(0, 2, 0) });
+	gradient->set_points(points);
 
 	CHECK_MESSAGE(
 			gradient->get_point_count() == 3,
@@ -109,12 +111,14 @@ TEST_CASE("[Gradient] Custom gradient (points specified out-of-order)") {
 	// HSL rainbow with points specified out of order.
 	// These should be sorted automatically when adding points.
 	Ref<Gradient> gradient = memnew(Gradient);
-	LocalVector<Gradient::Point> points;
-	Vector<float> offsets = { 0.2, 0.0, 0.8, 0.4, 1.0, 0.6 };
-	Vector<Color> colors = { Color(1, 0, 0), Color(1, 1, 0), Color(0, 1, 0), Color(0, 1, 1), Color(0, 0, 1), Color(1, 0, 1) };
-
-	gradient->set_offsets(offsets);
-	gradient->set_colors(colors);
+	Vector<Gradient::Point> points;
+	points.push_back({ 0.2, Color(1, 0, 0) });
+	points.push_back({ 0.0, Color(1, 1, 0) });
+	points.push_back({ 0.8, Color(0, 1, 0) });
+	points.push_back({ 0.4, Color(0, 1, 1) });
+	points.push_back({ 1.0, Color(0, 0, 1) });
+	points.push_back({ 0.6, Color(1, 0, 1) });
+	gradient->set_points(points);
 
 	CHECK_MESSAGE(
 			gradient->get_point_count() == 6,

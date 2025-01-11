@@ -2,9 +2,11 @@
 /*  project_settings.cpp                                                  */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -73,7 +75,7 @@ String ProjectSettings::get_imported_files_path() const {
 }
 
 #ifdef TOOLS_ENABLED
-// Returns the features that a project must have when opened with this build of Godot.
+// Returns the features that a project must have when opened with this build of Redot.
 // This is used by the project manager to provide the initial_settings for config/features.
 const PackedStringArray ProjectSettings::get_required_features() {
 	PackedStringArray features;
@@ -84,7 +86,7 @@ const PackedStringArray ProjectSettings::get_required_features() {
 	return features;
 }
 
-// Returns the features supported by this build of Godot. Includes all required features.
+// Returns the features supported by this build of Redot. Includes all required features.
 const PackedStringArray ProjectSettings::_get_supported_features() {
 	PackedStringArray features = get_required_features();
 #ifdef MODULE_MONO_ENABLED
@@ -107,7 +109,7 @@ const PackedStringArray ProjectSettings::_get_supported_features() {
 	return features;
 }
 
-// Returns the features that this project needs but this build of Godot lacks.
+// Returns the features that this project needs but this build of Redot lacks.
 const PackedStringArray ProjectSettings::get_unsupported_features(const PackedStringArray &p_project_features) {
 	PackedStringArray unsupported_features;
 	PackedStringArray supported_features = singleton->_get_supported_features();
@@ -124,7 +126,7 @@ const PackedStringArray ProjectSettings::get_unsupported_features(const PackedSt
 	return unsupported_features;
 }
 
-// Returns the features that both this project has and this build of Godot has, ensuring required features exist.
+// Returns the features that both this project has and this build of Redot has, ensuring required features exist.
 const PackedStringArray ProjectSettings::_trim_to_supported_features(const PackedStringArray &p_project_features) {
 	// Remove unsupported features if present.
 	PackedStringArray features = PackedStringArray(p_project_features);
@@ -594,7 +596,7 @@ Error ProjectSettings::_setup(const String &p_path, const String &p_main_pack, b
 		bool found = _load_resource_pack(exec_path);
 
 		// Attempt with exec_name.pck.
-		// (This is the usual case when distributing a Godot game.)
+		// (This is the usual case when distributing a Redot game.)
 		String exec_dir = exec_path.get_base_dir();
 		String exec_filename = exec_path.get_file();
 		String exec_basename = exec_filename.get_basename();
@@ -647,28 +649,6 @@ Error ProjectSettings::_setup(const String &p_path, const String &p_main_pack, b
 		}
 		return err;
 	}
-
-#ifdef MACOS_ENABLED
-	// Attempt to load project file from macOS .app bundle resources.
-	resource_path = OS::get_singleton()->get_bundle_resource_dir();
-	if (!resource_path.is_empty()) {
-		if (resource_path[resource_path.length() - 1] == '/') {
-			resource_path = resource_path.substr(0, resource_path.length() - 1); // Chop end.
-		}
-		Ref<DirAccess> d = DirAccess::create(DirAccess::ACCESS_FILESYSTEM);
-		ERR_FAIL_COND_V_MSG(d.is_null(), ERR_CANT_CREATE, vformat("Cannot create DirAccess for path '%s'.", resource_path));
-		d->change_dir(resource_path);
-
-		Error err;
-
-		err = _load_settings_text_or_binary(resource_path.path_join("project.godot"), resource_path.path_join("project.binary"));
-		if (err == OK && !p_ignore_override) {
-			// Optional, we don't mind if it fails.
-			_load_settings_text(resource_path.path_join("override.cfg"));
-			return err;
-		}
-	}
-#endif
 
 	// Nothing was found, try to find a project file in provided path (`p_path`)
 	// or, if requested (`p_upwards`) in parent directories.
@@ -1450,7 +1430,7 @@ void ProjectSettings::_add_builtin_input_map() {
 
 ProjectSettings::ProjectSettings() {
 	// Initialization of engine variables should be done in the setup() method,
-	// so that the values can be overridden from project.godot or project.binary.
+	// so that the values can be overridden from project.redot or project.binary.
 
 	CRASH_COND_MSG(singleton != nullptr, "Instantiating a new ProjectSettings singleton is not supported.");
 	singleton = this;
@@ -1562,7 +1542,7 @@ ProjectSettings::ProjectSettings() {
 	GLOBAL_DEF("debug/settings/crash_handler/message",
 			String("Please include this when reporting the bug to the project developer."));
 	GLOBAL_DEF("debug/settings/crash_handler/message.editor",
-			String("Please include this when reporting the bug on: https://github.com/godotengine/godot/issues"));
+			String("Please include this when reporting the bug on: https://github.com/Redot-Engine/redot-engine/issues"));
 	GLOBAL_DEF_RST(PropertyInfo(Variant::INT, "rendering/occlusion_culling/bvh_build_quality", PROPERTY_HINT_ENUM, "Low,Medium,High"), 2);
 	GLOBAL_DEF_RST("rendering/occlusion_culling/jitter_projection", true);
 

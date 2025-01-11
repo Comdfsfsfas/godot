@@ -2,9 +2,11 @@
 /*  extension_api_dump.cpp                                                */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -115,6 +117,7 @@ Dictionary GDExtensionAPIDump::generate_extension_api(bool p_include_docs) {
 		header["version_patch"] = 0;
 #endif
 		header["version_status"] = VERSION_STATUS;
+		header["version_status_version"] = VERSION_STATUS_VERSION;
 		header["version_build"] = VERSION_BUILD;
 		header["version_full_name"] = VERSION_FULL_NAME;
 

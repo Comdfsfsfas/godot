@@ -2,9 +2,11 @@
 /*  atlas_merging_dialog.h                                                */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -44,7 +46,7 @@ class AtlasMergingDialog : public ConfirmationDialog {
 	GDCLASS(AtlasMergingDialog, ConfirmationDialog);
 
 private:
-	int committed_actions_count = 0;
+	int commited_actions_count = 0;
 	bool delete_original_atlases = true;
 	Ref<TileSetAtlasSource> merged;
 	LocalVector<HashMap<Vector2i, Vector2i>> merged_mapping;

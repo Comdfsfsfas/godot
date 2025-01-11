@@ -2,9 +2,11 @@
 /*  label_3d.h                                                            */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -253,7 +255,7 @@ public:
 	StandardMaterial3D::TextureFilter get_texture_filter() const;
 
 	virtual AABB get_aabb() const override;
-	virtual Ref<TriangleMesh> generate_triangle_mesh() const override;
+	Ref<TriangleMesh> generate_triangle_mesh() const;
 
 	Label3D();
 	~Label3D();

@@ -2,9 +2,11 @@
 /*  export_plugin.cpp                                                     */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -1296,18 +1298,18 @@ Error EditorExportPlatformMacOS::_copy_and_sign_files(Ref<DirAccess> &dir_access
 #endif
 		print_verbose("export framework: " + p_src_path + " -> " + p_in_app_path);
 
-		bool plist_missing = false;
+		bool plist_misssing = false;
 		Ref<PList> plist;
 		plist.instantiate();
 		plist->load_file(p_src_path.path_join("Resources").path_join("Info.plist"));
 
 		Ref<PListNode> root_node = plist->get_root();
 		if (root_node.is_null()) {
-			plist_missing = true;
+			plist_misssing = true;
 		} else {
 			Dictionary root = root_node->get_value();
 			if (!root.has("CFBundleExecutable") || !root.has("CFBundleIdentifier") || !root.has("CFBundlePackageType") || !root.has("CFBundleInfoDictionaryVersion") || !root.has("CFBundleName") || !root.has("CFBundleSupportedPlatforms")) {
-				plist_missing = true;
+				plist_misssing = true;
 			}
 		}
 
@@ -1315,7 +1317,7 @@ Error EditorExportPlatformMacOS::_copy_and_sign_files(Ref<DirAccess> &dir_access
 		if (err == OK) {
 			err = dir_access->copy_dir(p_src_path, p_in_app_path, -1, true);
 		}
-		if (err == OK && plist_missing) {
+		if (err == OK && plist_misssing) {
 			add_message(EXPORT_MESSAGE_WARNING, TTR("Export"), vformat(TTR("\"%s\": Info.plist missing or invalid, new Info.plist generated."), p_src_path.get_file()));
 			// Generate Info.plist
 			String lib_name = p_src_path.get_basename().get_file();
@@ -1563,7 +1565,7 @@ Error EditorExportPlatformMacOS::export_project(const Ref<EditorExportPreset> &p
 	int ret = unzGoToFirstFile(src_pkg_zip);
 
 	String architecture = p_preset->get("binary_format/architecture");
-	String binary_to_use = "godot_macos_" + String(p_debug ? "debug" : "release") + "." + architecture;
+	String binary_to_use = "redot_macos_" + String(p_debug ? "debug" : "release") + "." + architecture;
 
 	String pkg_name;
 	if (String(GLOBAL_GET("application/config/name")) != "") {
@@ -1855,7 +1857,7 @@ Error EditorExportPlatformMacOS::export_project(const Ref<EditorExportPreset> &p
 			_fix_privacy_manifest(p_preset, data);
 		}
 
-		if (file.begins_with("Contents/MacOS/godot_")) {
+		if (file.begins_with("Contents/MacOS/redot_")) {
 			if (file != "Contents/MacOS/" + binary_to_use) {
 				ret = unzGoToNextFile(src_pkg_zip);
 				continue; // skip

@@ -2,9 +2,11 @@
 /*  viewport.cpp                                                          */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -967,6 +969,11 @@ void Viewport::_process_picking() {
 			}
 		}
 #endif // _3D_DISABLED
+
+		if (!local_input_handled) {
+			ERR_FAIL_COND(!is_inside_tree());
+			get_tree()->_call_input_pause(unhandled_picking_input_group, SceneTree::CALL_INPUT_TYPE_UNHANDLED_PICKING_INPUT, ev, this);
+		}
 	}
 }
 
@@ -2945,47 +2952,6 @@ bool Viewport::_sub_windows_forward_input(const Ref<InputEvent> &p_event) {
 	gui.subwindow_focused->_window_input(ev);
 
 	return true;
-}
-
-void Viewport::_window_start_drag(Window *p_window) {
-	int index = _sub_window_find(p_window);
-	ERR_FAIL_COND(index == -1);
-
-	SubWindow sw = gui.sub_windows.write[index];
-
-	if (gui.subwindow_focused != sw.window) {
-		// Refocus.
-		_sub_window_grab_focus(sw.window);
-	}
-
-	gui.subwindow_drag = SUB_WINDOW_DRAG_MOVE;
-	gui.subwindow_drag_from = get_mouse_position();
-	gui.subwindow_drag_pos = sw.window->get_position();
-	gui.currently_dragged_subwindow = sw.window;
-
-	_sub_window_update(sw.window);
-}
-
-void Viewport::_window_start_resize(SubWindowResize p_edge, Window *p_window) {
-	int index = _sub_window_find(p_window);
-	ERR_FAIL_COND(index == -1);
-
-	SubWindow sw = gui.sub_windows.write[index];
-	Rect2i r = Rect2i(sw.window->get_position(), sw.window->get_size());
-
-	if (gui.subwindow_focused != sw.window) {
-		// Refocus.
-		_sub_window_grab_focus(sw.window);
-	}
-
-	gui.subwindow_drag = SUB_WINDOW_DRAG_RESIZE;
-	gui.subwindow_resize_mode = p_edge;
-	gui.subwindow_resize_from_rect = r;
-	gui.subwindow_drag_from = get_mouse_position();
-	gui.subwindow_drag_pos = sw.window->get_position();
-	gui.currently_dragged_subwindow = sw.window;
-
-	_sub_window_update(sw.window);
 }
 
 void Viewport::_update_mouse_over() {
@@ -5119,6 +5085,7 @@ Viewport::Viewport() {
 	unhandled_input_group = "_vp_unhandled_input" + id;
 	shortcut_input_group = "_vp_shortcut_input" + id;
 	unhandled_key_input_group = "_vp_unhandled_key_input" + id;
+	unhandled_picking_input_group = "_vp_unhandled_picking_input" + id;
 
 	// Window tooltip.
 	gui.tooltip_delay = GLOBAL_GET("gui/timers/tooltip_delay_sec");

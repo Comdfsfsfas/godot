@@ -8,7 +8,7 @@ import urllib.request
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../"))
 
-from misc.utility.color import Ansi
+from methods import Ansi
 
 # Base Godot dependencies path
 # If cross-compiling (no LOCALAPPDATA), we install in `bin`
@@ -117,4 +117,4 @@ print(f"DirectX 12 Agility SDK {agility_sdk_version} installed successfully.\n")
 
 # Complete message
 print(f'{Ansi.GREEN}All Direct3D 12 SDK components were installed to "{deps_folder}" successfully!{Ansi.RESET}')
-print(f'{Ansi.GREEN}You can now build Godot with Direct3D 12 support enabled by running "scons d3d12=yes".{Ansi.RESET}')
+print(f'{Ansi.GREEN}You can now build Redot with Direct3D 12 support enabled by running "scons d3d12=yes".{Ansi.RESET}')

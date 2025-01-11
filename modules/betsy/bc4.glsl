@@ -102,9 +102,8 @@ void main() {
 			a -= dist2;
 		}
 
-		if (a >= dist) {
+		if (a >= dist)
 			ind += 1;
-		}
 
 		// turn linear scale into DXT index (0/1 are extremal pts)
 		ind = -ind & 7;
@@ -122,12 +121,10 @@ void main() {
 		}
 	}
 
-	if (mask0 != 0u) {
+	if (mask0 != 0u)
 		atomicOr(g_mask[maskIdxBase].x, mask0);
-	}
-	if (mask1 != 0u) {
+	if (mask1 != 0u)
 		atomicOr(g_mask[maskIdxBase].y, mask1);
-	}
 
 	memoryBarrierShared();
 	barrier();

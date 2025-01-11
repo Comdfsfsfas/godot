@@ -2,9 +2,11 @@
 /*  asset_library_editor_plugin.cpp                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -705,7 +707,7 @@ void EditorAssetLibrary::_notification(int p_what) {
 void EditorAssetLibrary::_update_repository_options() {
 	// TODO: Move to editor_settings.cpp
 	Dictionary default_urls;
-	default_urls["godotengine.org (Official)"] = "https://godotengine.org/asset-library/api";
+	default_urls["godotengine.org"] = "https://godotengine.org/asset-library/api";
 	Dictionary available_urls = _EDITOR_DEF("asset_library/available_urls", default_urls, true);
 	repository->clear();
 	Array keys = available_urls.keys();
@@ -763,8 +765,8 @@ const char *EditorAssetLibrary::sort_text[SORT_MAX] = {
 	TTRC("Least Recently Updated"),
 	TTRC("Name (A-Z)"),
 	TTRC("Name (Z-A)"),
-	TTRC("License (A-Z)"), // "cost" stores the SPDX license name in the Godot Asset Library.
-	TTRC("License (Z-A)"), // "cost" stores the SPDX license name in the Godot Asset Library.
+	TTRC("License (A-Z)"), // "cost" stores the SPDX license name in the Redot Asset Library.
+	TTRC("License (Z-A)"), // "cost" stores the SPDX license name in the Redot Asset Library.
 };
 
 const char *EditorAssetLibrary::support_key[SUPPORT_MAX] = {

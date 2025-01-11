@@ -2,9 +2,11 @@
 /*  rendering_device_driver.cpp                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -259,7 +261,7 @@ Error RenderingDeviceDriver::_reflect_spirv(VectorView<ShaderStageSPIRVData> p_s
 							}
 						}
 
-						if (existing >= 0) {
+						if (existing > 0) {
 							r_reflection.specialization_constants.write[existing].stages.set_flag(stage_flag);
 						} else {
 							r_reflection.specialization_constants.push_back(sconst);

@@ -2,9 +2,11 @@
 /*  base_button.cpp                                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -151,13 +153,11 @@ void BaseButton::_toggled(bool p_pressed) {
 void BaseButton::on_action_event(Ref<InputEvent> p_event) {
 	Ref<InputEventMouseButton> mouse_button = p_event;
 
-	if (p_event->is_pressed() && (mouse_button.is_null() || status.hovering)) {
+	if (!status.pressed_down_with_focus && p_event->is_pressed() && (mouse_button.is_null() || status.hovering)) {
 		status.press_attempt = true;
 		status.pressing_inside = true;
-		if (!status.pressed_down_with_focus) {
-			status.pressed_down_with_focus = true;
-			emit_signal(SNAME("button_down"));
-		}
+		status.pressed_down_with_focus = true;
+		emit_signal(SNAME("button_down"));
 	}
 
 	if (status.press_attempt && status.pressing_inside) {
@@ -183,13 +183,11 @@ void BaseButton::on_action_event(Ref<InputEvent> p_event) {
 		}
 	}
 
-	if (!p_event->is_pressed()) {
+	if (status.pressed_down_with_focus && !p_event->is_pressed()) {
 		status.press_attempt = false;
 		status.pressing_inside = false;
-		if (status.pressed_down_with_focus) {
-			status.pressed_down_with_focus = false;
-			emit_signal(SNAME("button_up"));
-		}
+		status.pressed_down_with_focus = false;
+		emit_signal(SNAME("button_up"));
 	}
 
 	queue_redraw();

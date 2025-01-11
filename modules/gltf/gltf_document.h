@@ -2,9 +2,11 @@
 /*  gltf_document.h                                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -103,7 +105,7 @@ public:
 	static String _gen_unique_name_static(HashSet<String> &r_unique_names, const String &p_name);
 
 private:
-	void _build_parent_hierarchy(Ref<GLTFState> p_state);
+	void _build_parent_hierachy(Ref<GLTFState> p_state);
 	double _filter_number(double p_float);
 	void _round_min_max_components(Vector<double> &r_type_min, Vector<double> &r_type_max);
 	String _get_component_type_name(const GLTFAccessor::GLTFComponentType p_component_type);

@@ -2,9 +2,11 @@
 /*  graph_edit_arranger.cpp                                               */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -458,7 +460,7 @@ float GraphEditArranger::_calculate_threshold(const StringName &p_v, const Strin
 			Vector2 pos_from = gnode_from->get_output_port_position(incoming->from_port) * graph_edit->get_zoom();
 			Vector2 pos_to = gnode_to->get_input_port_position(incoming->to_port) * graph_edit->get_zoom();
 
-			// If connected block node is selected, calculate threshold or add current block to list.
+			// If connected block node is selected, calculate thershold or add current block to list.
 			if (gnode_from->is_selected()) {
 				Vector2 connected_block_pos = r_node_positions[r_root[incoming->from_node]];
 				if (connected_block_pos.y != FLT_MAX) {
@@ -489,7 +491,7 @@ float GraphEditArranger::_calculate_threshold(const StringName &p_v, const Strin
 			Vector2 pos_from = gnode_from->get_output_port_position(outgoing->from_port) * graph_edit->get_zoom();
 			Vector2 pos_to = gnode_to->get_input_port_position(outgoing->to_port) * graph_edit->get_zoom();
 
-			// If connected block node is selected, calculate threshold or add current block to list.
+			// If connected block node is selected, calculate thershold or add current block to list.
 			if (gnode_to->is_selected()) {
 				Vector2 connected_block_pos = r_node_positions[r_root[outgoing->to_node]];
 				if (connected_block_pos.y != FLT_MAX) {

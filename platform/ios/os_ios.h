@@ -2,9 +2,11 @@
 /*  os_ios.h                                                              */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -34,8 +36,8 @@
 #ifdef IOS_ENABLED
 
 #import "ios.h"
+#import "joypad_ios.h"
 
-#import "drivers/apple/joypad_apple.h"
 #import "drivers/coreaudio/audio_driver_coreaudio.h"
 #include "drivers/unix/os_unix.h"
 #include "servers/audio_server.h"
@@ -58,7 +60,7 @@ private:
 
 	iOS *ios = nullptr;
 
-	JoypadApple *joypad_apple = nullptr;
+	JoypadIOS *joypad_ios = nullptr;
 
 	MainLoop *main_loop = nullptr;
 

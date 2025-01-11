@@ -2,9 +2,11 @@
 /*  scene_tree.cpp                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -1327,6 +1329,9 @@ void SceneTree::_call_input_pause(const StringName &p_group, CallInputType p_cal
 				break;
 			case CALL_INPUT_TYPE_UNHANDLED_KEY_INPUT:
 				n->_call_unhandled_key_input(p_input);
+				break;
+			case CALL_INPUT_TYPE_UNHANDLED_PICKING_INPUT:
+				n->_call_unhandled_picking_input(p_input);
 				break;
 		}
 	}

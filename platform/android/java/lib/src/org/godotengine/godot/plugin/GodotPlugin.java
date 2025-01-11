@@ -2,9 +2,11 @@
 /*  GodotPlugin.java                                                      */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -28,10 +30,7 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-package org.godotengine.godot.plugin;
-
-import org.godotengine.godot.BuildConfig;
-import org.godotengine.godot.Godot;
+package org.redotengine.godot.plugin;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -56,6 +55,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import org.redotengine.godot.BuildConfig;
+import org.redotengine.godot.Godot;
+
 /**
  * Base class for Godot Android plugins.
  * <p>
@@ -64,7 +66,7 @@ import javax.microedition.khronos.opengles.GL10;
  * - The plugin must have a dependency on the Godot Android library: `implementation "org.godotengine:godot:<godotLibVersion>"`
  * <p>
  * - The plugin must include a <meta-data> tag in its Android manifest with the following format:
- * <meta-data android:name="org.godotengine.plugin.v2.[PluginName]" android:value="[plugin.init.ClassFullName]" />
+ * <meta-data android:name="org.redotengine.plugin.v2.[PluginName]" android:value="[plugin.init.ClassFullName]" />
  * <p>
  * Where:
  * <p>
@@ -167,7 +169,7 @@ public abstract class GodotPlugin {
 
 	/**
 	 * Invoked once during the initialization process after creation of the
-	 * {@link org.godotengine.godot.GodotRenderView} view.
+	 * {@link org.redotengine.godot.GodotRenderView} view.
 	 * <p>
 	 * The plugin can return a non-null {@link View} layout which will be added to the Godot view
 	 * hierarchy.

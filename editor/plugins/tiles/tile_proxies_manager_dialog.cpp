@@ -2,9 +2,11 @@
 /*  tile_proxies_manager_dialog.cpp                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -85,7 +87,7 @@ void TileProxiesManagerDialog::_delete_selected_bindings() {
 	undo_redo->add_undo_method(this, "_update_lists");
 	undo_redo->commit_action();
 
-	committed_actions_count += 1;
+	commited_actions_count += 1;
 }
 
 void TileProxiesManagerDialog::_update_lists() {
@@ -191,7 +193,7 @@ void TileProxiesManagerDialog::_add_button_pressed() {
 		undo_redo->add_do_method(this, "_update_lists");
 		undo_redo->add_undo_method(this, "_update_lists");
 		undo_redo->commit_action();
-		committed_actions_count++;
+		commited_actions_count++;
 	}
 }
 
@@ -306,10 +308,10 @@ void TileProxiesManagerDialog::_unhandled_key_input(Ref<InputEvent> p_event) {
 
 void TileProxiesManagerDialog::cancel_pressed() {
 	EditorUndoRedoManager *undo_redo = EditorUndoRedoManager::get_singleton();
-	for (int i = 0; i < committed_actions_count; i++) {
+	for (int i = 0; i < commited_actions_count; i++) {
 		undo_redo->undo();
 	}
-	committed_actions_count = 0;
+	commited_actions_count = 0;
 }
 
 void TileProxiesManagerDialog::_bind_methods() {
@@ -320,7 +322,7 @@ void TileProxiesManagerDialog::_bind_methods() {
 void TileProxiesManagerDialog::update_tile_set(Ref<TileSet> p_tile_set) {
 	ERR_FAIL_COND(p_tile_set.is_null());
 	tile_set = p_tile_set;
-	committed_actions_count = 0;
+	commited_actions_count = 0;
 	_update_lists();
 }
 

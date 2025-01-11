@@ -2,9 +2,11 @@
 /*  editor_export_platform.cpp                                            */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -1653,7 +1655,7 @@ void EditorExportPlatform::zip_folder_recursive(zipFile &p_zip, const String &p_
 
 			zip_fileinfo zipfi;
 			zipfi.tmz_date.tm_year = dt.year;
-			zipfi.tmz_date.tm_mon = dt.month - 1; // Note: "tm" month range - 0..11, Godot month range - 1..12, https://www.cplusplus.com/reference/ctime/tm/
+			zipfi.tmz_date.tm_mon = dt.month - 1; // Note: "tm" month range - 0..11, Redot month range - 1..12, https://www.cplusplus.com/reference/ctime/tm/
 			zipfi.tmz_date.tm_mday = dt.day;
 			zipfi.tmz_date.tm_hour = dt.hour;
 			zipfi.tmz_date.tm_min = dt.minute;
@@ -1685,8 +1687,8 @@ void EditorExportPlatform::zip_folder_recursive(zipFile &p_zip, const String &p_
 					0x0314, // "version made by", 0x03 - Unix, 0x14 - ZIP specification version 2.0, required to store Unix file permissions
 					1 << 11); // Bit 11 is the language encoding flag. When set, filename and comment fields must be encoded using UTF-8.
 
-			const CharString target_utf8 = da->read_link(f).utf8();
-			zipWriteInFileInZip(p_zip, target_utf8.get_data(), target_utf8.size());
+			String target = da->read_link(f);
+			zipWriteInFileInZip(p_zip, target.utf8().get_data(), target.utf8().size());
 			zipCloseFileInZip(p_zip);
 		} else if (da->current_is_dir()) {
 			zip_folder_recursive(p_zip, p_root_path, p_folder.path_join(f), p_pkg_name);
@@ -1697,7 +1699,7 @@ void EditorExportPlatform::zip_folder_recursive(zipFile &p_zip, const String &p_
 
 			zip_fileinfo zipfi;
 			zipfi.tmz_date.tm_year = dt.year;
-			zipfi.tmz_date.tm_mon = dt.month - 1; // Note: "tm" month range - 0..11, Godot month range - 1..12, https://www.cplusplus.com/reference/ctime/tm/
+			zipfi.tmz_date.tm_mon = dt.month - 1; // Note: "tm" month range - 0..11, Redot month range - 1..12, https://www.cplusplus.com/reference/ctime/tm/
 			zipfi.tmz_date.tm_mday = dt.day;
 			zipfi.tmz_date.tm_hour = dt.hour;
 			zipfi.tmz_date.tm_min = dt.minute;

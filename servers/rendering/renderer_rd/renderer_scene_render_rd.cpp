@@ -2,9 +2,11 @@
 /*  renderer_scene_render_rd.cpp                                          */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -1228,7 +1230,6 @@ void RendererSceneRenderRD::render_scene(const Ref<RenderSceneBuffers> &p_render
 
 		if (p_render_buffers.is_valid() && p_reflection_probe.is_null()) {
 			render_data.transparent_bg = texture_storage->render_target_get_transparent(rb->get_render_target());
-			render_data.render_region = texture_storage->render_target_get_render_region(rb->get_render_target());
 		}
 	}
 

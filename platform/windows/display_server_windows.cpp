@@ -2,9 +2,11 @@
 /*  display_server_windows.cpp                                            */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -138,10 +140,7 @@ bool DisplayServerWindows::has_feature(Feature p_feature) const {
 		case FEATURE_SCREEN_CAPTURE:
 		case FEATURE_STATUS_INDICATOR:
 		case FEATURE_WINDOW_EMBEDDING:
-		case FEATURE_SCREEN_EXCLUDE_FROM_CAPTURE:
 			return true;
-		case FEATURE_EMOJI_AND_SYMBOL_PICKER:
-			return (os_ver.dwBuildNumber >= 17134); // Windows 10 Redstone 4 (1803)+ only.
 		default:
 			return false;
 	}
@@ -1483,7 +1482,7 @@ void DisplayServerWindows::screen_set_keep_on(bool p_enable) {
 	}
 
 	if (p_enable) {
-		const String reason = "Godot Engine running with display/window/energy_saving/keep_screen_on = true";
+		const String reason = "Redot Engine running with display/window/energy_saving/keep_screen_on = true";
 		Char16String reason_utf16 = reason.utf16();
 		REASON_CONTEXT context;
 		context.Version = POWER_REQUEST_CONTEXT_VERSION;
@@ -3435,27 +3434,6 @@ Key DisplayServerWindows::keyboard_get_label_from_physical(Key p_keycode) const 
 	return p_keycode;
 }
 
-void DisplayServerWindows::show_emoji_and_symbol_picker() const {
-	// Send Win + Period shortcut, there's no non-WinRT public API.
-
-	INPUT input[4] = {};
-	input[0].type = INPUT_KEYBOARD; // Win down.
-	input[0].ki.wVk = VK_LWIN;
-
-	input[1].type = INPUT_KEYBOARD; // Period down.
-	input[1].ki.wVk = VK_OEM_PERIOD;
-
-	input[2].type = INPUT_KEYBOARD; // Win up.
-	input[2].ki.wVk = VK_LWIN;
-	input[2].ki.dwFlags = KEYEVENTF_KEYUP;
-
-	input[3].type = INPUT_KEYBOARD; // Period up.
-	input[3].ki.wVk = VK_OEM_PERIOD;
-	input[3].ki.dwFlags = KEYEVENTF_KEYUP;
-
-	SendInput(4, input, sizeof(INPUT));
-}
-
 String DisplayServerWindows::_get_keyboard_layout_display_name(const String &p_klid) const {
 	String ret;
 	HKEY key;
@@ -4014,10 +3992,6 @@ void DisplayServerWindows::window_start_drag(WindowID p_window) {
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
 
-	if (wd.parent_hwnd) {
-		return; // Embedded window.
-	}
-
 	ReleaseCapture();
 
 	POINT coords;
@@ -4033,10 +4007,6 @@ void DisplayServerWindows::window_start_resize(WindowResizeEdge p_edge, WindowID
 	ERR_FAIL_INDEX(int(p_edge), WINDOW_EDGE_MAX);
 	ERR_FAIL_COND(!windows.has(p_window));
 	WindowData &wd = windows[p_window];
-
-	if (wd.parent_hwnd) {
-		return; // Embedded window.
-	}
 
 	ReleaseCapture();
 

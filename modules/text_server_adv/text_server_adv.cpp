@@ -2,9 +2,11 @@
 /*  text_server_adv.cpp                                                   */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -69,7 +71,6 @@ using namespace godot;
 #ifdef _MSC_VER
 #pragma warning(disable : 4458)
 #endif
-#include <core/EdgeHolder.h>
 #include <core/ShapeDistanceFinder.h>
 #include <core/contour-combiners.h>
 #include <core/edge-selectors.h>
@@ -5795,7 +5796,7 @@ bool TextServerAdvanced::_shaped_text_update_breaks(const RID &p_shaped) {
 	return sd->line_breaks_valid;
 }
 
-_FORCE_INLINE_ int64_t _generate_kashida_justification_opportunities(const String &p_data, int64_t p_start, int64_t p_end) {
+_FORCE_INLINE_ int64_t _generate_kashida_justification_opportunies(const String &p_data, int64_t p_start, int64_t p_end) {
 	int64_t kashida_pos = -1;
 	int8_t priority = 100;
 	int64_t i = p_start;
@@ -5900,14 +5901,14 @@ bool TextServerAdvanced::_shaped_text_update_justification_ops(const RID &p_shap
 			int limit = 0;
 			for (int i = 0; i < sd->text.length(); i++) {
 				if (is_whitespace(data[i])) {
-					int ks = _generate_kashida_justification_opportunities(sd->text, limit, i) + sd->start;
+					int ks = _generate_kashida_justification_opportunies(sd->text, limit, i) + sd->start;
 					if (ks != -1) {
 						sd->jstops[ks] = true;
 					}
 					limit = i + 1;
 				}
 			}
-			int ks = _generate_kashida_justification_opportunities(sd->text, limit, sd->text.length()) + sd->start;
+			int ks = _generate_kashida_justification_opportunies(sd->text, limit, sd->text.length()) + sd->start;
 			if (ks != -1) {
 				sd->jstops[ks] = true;
 			}
@@ -5917,7 +5918,7 @@ bool TextServerAdvanced::_shaped_text_update_justification_ops(const RID &p_shap
 				if (ubrk_getRuleStatus(bi) != UBRK_WORD_NONE) {
 					int i = _convert_pos(sd, ubrk_current(bi));
 					sd->jstops[i + sd->start] = false;
-					int ks = _generate_kashida_justification_opportunities(sd->text, limit, i);
+					int ks = _generate_kashida_justification_opportunies(sd->text, limit, i);
 					if (ks != -1) {
 						sd->jstops[ks + sd->start] = true;
 					}

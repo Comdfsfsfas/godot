@@ -2,9 +2,11 @@
 /*  cpu_particles_2d.cpp                                                  */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -165,10 +167,10 @@ void CPUParticles2D::_update_mesh_texture() {
 	};
 
 	Vector<Vector2> uvs;
-	AtlasTexture *atlas_texture = Object::cast_to<AtlasTexture>(*texture);
-	if (atlas_texture && atlas_texture->get_atlas().is_valid()) {
-		Rect2 region_rect = atlas_texture->get_region();
-		Size2 atlas_size = atlas_texture->get_atlas()->get_size();
+	AtlasTexture *atlas_texure = Object::cast_to<AtlasTexture>(*texture);
+	if (atlas_texure && atlas_texure->get_atlas().is_valid()) {
+		Rect2 region_rect = atlas_texure->get_region();
+		Size2 atlas_size = atlas_texure->get_atlas()->get_size();
 		uvs.push_back(Vector2(region_rect.position.x / atlas_size.x, region_rect.position.y / atlas_size.y));
 		uvs.push_back(Vector2((region_rect.position.x + region_rect.size.x) / atlas_size.x, region_rect.position.y / atlas_size.y));
 		uvs.push_back(Vector2((region_rect.position.x + region_rect.size.x) / atlas_size.x, (region_rect.position.y + region_rect.size.y) / atlas_size.y));

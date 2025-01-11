@@ -2,9 +2,11 @@
 /*  godot_joints_2d.cpp                                                   */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -358,7 +360,7 @@ k_tensor(GodotBody2D *a, GodotBody2D *b, Vector2 r1, Vector2 r2, Vector2 *k1, Ve
 	k21 += r1nxy;
 	k22 += r1xsq;
 
-	// add the influence from r2
+	// add the influnce from r2
 	real_t b_i_inv = b->get_inv_inertia();
 	real_t r2xsq = r2.x * r2.x * b_i_inv;
 	real_t r2ysq = r2.y * r2.y * b_i_inv;

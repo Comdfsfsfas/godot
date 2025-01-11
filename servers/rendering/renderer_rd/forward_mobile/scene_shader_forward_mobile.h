@@ -2,9 +2,11 @@
 /*  scene_shader_forward_mobile.h                                         */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -59,8 +61,6 @@ public:
 
 	struct ShaderSpecialization {
 		union {
-			uint32_t packed_0;
-
 			struct {
 				uint32_t use_light_projector : 1;
 				uint32_t use_light_soft_shadows : 1;
@@ -84,11 +84,11 @@ public:
 				uint32_t soft_shadow_samples : 6;
 				uint32_t penumbra_shadow_samples : 6;
 			};
+
+			uint32_t packed_0;
 		};
 
 		union {
-			uint32_t packed_1;
-
 			struct {
 				uint32_t directional_soft_shadow_samples : 6;
 				uint32_t directional_penumbra_shadow_samples : 6;
@@ -98,30 +98,32 @@ public:
 				uint32_t directional_lights : 4;
 				uint32_t decals : 4;
 			};
+
+			uint32_t packed_1;
 		};
 
 		union {
-			uint32_t packed_2;
-
 			struct {
 				uint32_t directional_light_blend_splits : 8;
 				uint32_t padding_1 : 24;
 			};
+
+			uint32_t packed_2;
 		};
 
 		union {
-			float packed_3;
 			float luminance_multiplier;
+			float packed_3;
 		};
 	};
 
 	struct UbershaderConstants {
 		union {
-			uint32_t packed_0;
-
 			struct {
 				uint32_t cull_mode : 2;
 			};
+
+			uint32_t packed_0;
 		};
 
 		uint32_t padding_1;

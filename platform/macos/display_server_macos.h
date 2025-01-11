@@ -2,9 +2,11 @@
 /*  display_server_macos.h                                                */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -432,7 +434,6 @@ public:
 	virtual String keyboard_get_layout_name(int p_index) const override;
 	virtual Key keyboard_get_keycode_from_physical(Key p_keycode) const override;
 	virtual Key keyboard_get_label_from_physical(Key p_keycode) const override;
-	virtual void show_emoji_and_symbol_picker() const override;
 
 	virtual void process_events() override;
 	virtual void force_process_and_drop_events() override;

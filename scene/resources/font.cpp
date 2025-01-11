@@ -2,9 +2,11 @@
 /*  font.cpp                                                              */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -3173,7 +3175,7 @@ void SystemFont::_update_base_font() {
 		base_font.unref();
 	}
 
-	face_indices.clear();
+	face_indeces.clear();
 	ftr_weight = 0;
 	ftr_stretch = 0;
 	ftr_italic = 0;
@@ -3211,17 +3213,17 @@ void SystemFont::_update_base_font() {
 				score += 30;
 			}
 			if (score > best_score) {
-				face_indices.clear();
+				face_indeces.clear();
 			}
 			if (score >= best_score) {
 				best_score = score;
-				face_indices.push_back(i);
+				face_indeces.push_back(i);
 			}
 		}
-		if (face_indices.is_empty()) {
-			face_indices.push_back(0);
+		if (face_indeces.is_empty()) {
+			face_indeces.push_back(0);
 		}
-		file->set_face_index(0, face_indices[0]);
+		file->set_face_index(0, face_indeces[0]);
 
 		// If it's a variable font, apply weight, stretch and italic coordinates to match requested style.
 		if (best_score != 150) {
@@ -3275,7 +3277,7 @@ void SystemFont::reset_state() {
 	}
 
 	names.clear();
-	face_indices.clear();
+	face_indeces.clear();
 	ftr_weight = 0;
 	ftr_stretch = 0;
 	ftr_italic = 0;
@@ -3579,9 +3581,9 @@ RID SystemFont::find_variation(const Dictionary &p_variation_coordinates, int p_
 			var[TS->name_to_tag("italic")] = ftr_italic;
 		}
 
-		if (!face_indices.is_empty()) {
-			int face_index = CLAMP(p_face_index, 0, face_indices.size() - 1);
-			return f->find_variation(var, face_indices[face_index], p_strength, p_transform, p_spacing_top, p_spacing_bottom, p_spacing_space, p_spacing_glyph, p_baseline_offset);
+		if (!face_indeces.is_empty()) {
+			int face_index = CLAMP(p_face_index, 0, face_indeces.size() - 1);
+			return f->find_variation(var, face_indeces[face_index], p_strength, p_transform, p_spacing_top, p_spacing_bottom, p_spacing_space, p_spacing_glyph, p_baseline_offset);
 		} else {
 			return f->find_variation(var, 0, p_strength, p_transform, p_spacing_top, p_spacing_bottom, p_spacing_space, p_spacing_glyph, p_baseline_offset);
 		}
@@ -3592,7 +3594,7 @@ RID SystemFont::find_variation(const Dictionary &p_variation_coordinates, int p_
 RID SystemFont::_get_rid() const {
 	Ref<Font> f = _get_base_font_or_default();
 	if (f.is_valid()) {
-		if (!face_indices.is_empty()) {
+		if (!face_indeces.is_empty()) {
 			Dictionary var;
 			if (ftr_weight > 0) {
 				var[TS->name_to_tag("weight")] = ftr_weight;
@@ -3603,7 +3605,7 @@ RID SystemFont::_get_rid() const {
 			if (ftr_italic > 0) {
 				var[TS->name_to_tag("italic")] = ftr_italic;
 			}
-			return f->find_variation(var, face_indices[0]);
+			return f->find_variation(var, face_indeces[0]);
 		} else {
 			return f->_get_rid();
 		}
@@ -3612,7 +3614,7 @@ RID SystemFont::_get_rid() const {
 }
 
 int64_t SystemFont::get_face_count() const {
-	return face_indices.size();
+	return face_indeces.size();
 }
 
 SystemFont::SystemFont() {

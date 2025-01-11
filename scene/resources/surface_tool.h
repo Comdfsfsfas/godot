@@ -2,9 +2,11 @@
 /*  surface_tool.h                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -43,23 +45,17 @@ class SurfaceTool : public RefCounted {
 
 public:
 	struct Vertex {
-		// Trivial data for which the hash is computed using hash_buffer.
-		// ----------------------------------------------------------------
-		uint32_t smooth_group = 0; // Must be first.
-
+		Vector3 vertex;
 		Color color;
-		Vector3 normal; // normal, binormal, tangent.
+		Vector3 normal; // normal, binormal, tangent
 		Vector3 binormal;
 		Vector3 tangent;
 		Vector2 uv;
 		Vector2 uv2;
-		Color custom[RS::ARRAY_CUSTOM_COUNT];
-
-		Vector3 vertex; // Must be last.
-		// ----------------------------------------------------------------
-
 		Vector<int> bones;
 		Vector<float> weights;
+		Color custom[RS::ARRAY_CUSTOM_COUNT];
+		uint32_t smooth_group = 0;
 
 		bool operator==(const Vertex &p_vertex) const;
 

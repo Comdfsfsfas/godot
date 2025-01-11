@@ -2,9 +2,11 @@
 /*  export_plugin.cpp                                                     */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -2094,7 +2096,7 @@ Error EditorExportPlatformIOS::_export_ios_plugins(const Ref<EditorExportPreset>
 		plugin_format["initialization"] = plugin_initialization_cpp_code;
 		plugin_format["deinitialization"] = plugin_deinitialization_cpp_code;
 
-		String plugin_cpp_code = "\n// Godot Plugins\n"
+		String plugin_cpp_code = "\n// Redot Plugins\n"
 								 "void godot_ios_plugins_initialize();\n"
 								 "void godot_ios_plugins_deinitialize();\n"
 								 "// Exported Plugins\n\n"

@@ -2,9 +2,11 @@
 /*  curve.h                                                               */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -156,7 +158,7 @@ private:
 			TangentMode right_mode = TANGENT_FREE);
 	void _remove_point(int p_index);
 
-	LocalVector<Point> _points;
+	Vector<Point> _points;
 	mutable bool _baked_cache_dirty = false;
 	mutable Vector<real_t> _baked_cache;
 	int _bake_resolution = 100;
@@ -177,7 +179,7 @@ class Curve2D : public Resource {
 		Vector2 position;
 	};
 
-	LocalVector<Point> points;
+	Vector<Point> points;
 
 	struct BakedPoint {
 		real_t ofs = 0.0;
@@ -265,7 +267,7 @@ class Curve3D : public Resource {
 		real_t tilt = 0.0;
 	};
 
-	LocalVector<Point> points;
+	Vector<Point> points;
 #ifdef TOOLS_ENABLED
 	// For Path3DGizmo.
 	mutable Vector<size_t> points_in_cache;

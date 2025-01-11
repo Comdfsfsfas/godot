@@ -2,9 +2,11 @@
 /*  resource_importer_layered_texture.cpp                                 */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -489,7 +491,7 @@ void ResourceImporterLayeredTexture::_check_compress_ctex(const String &p_source
 		_save_tex(*r_texture_import->slices, r_texture_import->save_path + "." + extension, r_texture_import->compress_mode, r_texture_import->lossy, Image::COMPRESS_S3TC /* IGNORED */, *r_texture_import->csource, r_texture_import->used_channels, r_texture_import->mipmaps, false);
 		return;
 	}
-	// Must import in all formats, in order of priority (so platform chooses the best supported one. IE, etc2 over etc).
+	// Must import in all formats, in order of priority (so platform choses the best supported one. IE, etc2 over etc).
 	// Android, GLES 2.x
 
 	const bool can_s3tc_bptc = ResourceImporterTextureSettings::should_import_s3tc_bptc();

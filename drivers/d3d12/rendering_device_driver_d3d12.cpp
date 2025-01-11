@@ -2,9 +2,11 @@
 /*  rendering_device_driver_d3d12.cpp                                     */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -1660,7 +1662,7 @@ bool RenderingDeviceDriverD3D12::texture_can_make_shared_with_format(TextureID p
 /**** SAMPLER ****/
 /*****************/
 
-static const D3D12_TEXTURE_ADDRESS_MODE RD_REPEAT_MODE_TO_D3D12_ADDRESS_MODE[RDD::SAMPLER_REPEAT_MODE_MAX] = {
+static const D3D12_TEXTURE_ADDRESS_MODE RD_REPEAT_MODE_TO_D3D12_ADDRES_MODE[RDD::SAMPLER_REPEAT_MODE_MAX] = {
 	D3D12_TEXTURE_ADDRESS_MODE_WRAP,
 	D3D12_TEXTURE_ADDRESS_MODE_MIRROR,
 	D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
@@ -1715,9 +1717,9 @@ RDD::SamplerID RenderingDeviceDriverD3D12::sampler_create(const SamplerState &p_
 				p_state.enable_compare ? D3D12_FILTER_REDUCTION_TYPE_COMPARISON : D3D12_FILTER_REDUCTION_TYPE_STANDARD);
 	}
 
-	sampler_desc.AddressU = RD_REPEAT_MODE_TO_D3D12_ADDRESS_MODE[p_state.repeat_u];
-	sampler_desc.AddressV = RD_REPEAT_MODE_TO_D3D12_ADDRESS_MODE[p_state.repeat_v];
-	sampler_desc.AddressW = RD_REPEAT_MODE_TO_D3D12_ADDRESS_MODE[p_state.repeat_w];
+	sampler_desc.AddressU = RD_REPEAT_MODE_TO_D3D12_ADDRES_MODE[p_state.repeat_u];
+	sampler_desc.AddressV = RD_REPEAT_MODE_TO_D3D12_ADDRES_MODE[p_state.repeat_v];
+	sampler_desc.AddressW = RD_REPEAT_MODE_TO_D3D12_ADDRES_MODE[p_state.repeat_w];
 
 	for (int i = 0; i < 4; i++) {
 		sampler_desc.BorderColor[i] = RD_TO_D3D12_SAMPLER_BORDER_COLOR[p_state.border_color][i];
@@ -3579,7 +3581,7 @@ Vector<uint8_t> RenderingDeviceDriverD3D12::shader_compile_binary_from_spirv(Vec
 		binptr[0] = 'G';
 		binptr[1] = 'S';
 		binptr[2] = 'B';
-		binptr[3] = 'D'; // Godot shader binary data.
+		binptr[3] = 'D'; // Redot shader binary data.
 		offset += 4;
 		encode_uint32(ShaderBinary::VERSION, binptr + offset);
 		offset += sizeof(uint32_t);
@@ -3811,7 +3813,7 @@ void RenderingDeviceDriverD3D12::shader_destroy_modules(ShaderID p_shader) {
 /**** UNIFORM SET ****/
 /*********************/
 
-static void _add_descriptor_count_for_uniform(RenderingDevice::UniformType p_type, uint32_t p_binding_length, bool p_double_srv_uav_ambiguous, uint32_t &r_num_resources, uint32_t &r_num_samplers, bool &r_srv_uav_ambiguity) {
+static void _add_descriptor_count_for_uniform(RenderingDevice::UniformType p_type, uint32_t p_binding_length, bool p_dobule_srv_uav_ambiguous, uint32_t &r_num_resources, uint32_t &r_num_samplers, bool &r_srv_uav_ambiguity) {
 	r_srv_uav_ambiguity = false;
 
 	// Some resource types can be SRV or UAV, depending on what NIR-DXIL decided for a specific shader variant.
@@ -3832,11 +3834,11 @@ static void _add_descriptor_count_for_uniform(RenderingDevice::UniformType p_typ
 			r_num_resources += 1;
 		} break;
 		case RenderingDevice::UNIFORM_TYPE_STORAGE_BUFFER: {
-			r_num_resources += p_double_srv_uav_ambiguous ? 2 : 1;
+			r_num_resources += p_dobule_srv_uav_ambiguous ? 2 : 1;
 			r_srv_uav_ambiguity = true;
 		} break;
 		case RenderingDevice::UNIFORM_TYPE_IMAGE: {
-			r_num_resources += p_binding_length * (p_double_srv_uav_ambiguous ? 2 : 1);
+			r_num_resources += p_binding_length * (p_dobule_srv_uav_ambiguous ? 2 : 1);
 			r_srv_uav_ambiguity = true;
 		} break;
 		default: {

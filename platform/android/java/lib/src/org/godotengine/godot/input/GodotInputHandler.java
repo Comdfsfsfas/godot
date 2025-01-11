@@ -2,9 +2,11 @@
 /*  GodotInputHandler.java                                                */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -28,13 +30,9 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-package org.godotengine.godot.input;
+package org.redotengine.godot.input;
 
-import static org.godotengine.godot.utils.GLUtils.DEBUG;
-
-import org.godotengine.godot.Godot;
-import org.godotengine.godot.GodotLib;
-import org.godotengine.godot.GodotRenderView;
+import static org.redotengine.godot.utils.GLUtils.DEBUG;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -58,6 +56,10 @@ import androidx.annotation.NonNull;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.redotengine.godot.Godot;
+import org.redotengine.godot.GodotLib;
+import org.redotengine.godot.GodotRenderView;
 
 /**
  * Handles input related events for the {@link GodotRenderView} view.
@@ -369,7 +371,7 @@ public class GodotInputHandler implements InputManager.InputDeviceListener, Sens
 		Collections.sort(joystick.axes);
 		for (int idx = 0; idx < joystick.axes.size(); idx++) {
 			//Helps with creating new joypad mappings.
-			Log.i(TAG, " - Mapping Android axis " + joystick.axes.get(idx) + " to Godot axis " + idx);
+			Log.i(TAG, " - Mapping Android axis " + joystick.axes.get(idx) + " to Redot axis " + idx);
 		}
 		mJoysticksDevices.put(deviceId, joystick);
 

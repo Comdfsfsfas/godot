@@ -2,9 +2,11 @@
 /*  renderer_canvas_render_rd.cpp                                         */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -103,7 +105,7 @@ void RendererCanvasRenderRD::_update_transform_to_mat4(const Transform3D &p_tran
 RendererCanvasRender::PolygonID RendererCanvasRenderRD::request_polygon(const Vector<int> &p_indices, const Vector<Point2> &p_points, const Vector<Color> &p_colors, const Vector<Point2> &p_uvs, const Vector<int> &p_bones, const Vector<float> &p_weights) {
 	// Care must be taken to generate array formats
 	// in ways where they could be reused, so we will
-	// put single-occurring elements first, and repeated
+	// put single-occuring elements first, and repeated
 	// elements later. This way the generated formats are
 	// the same no matter the length of the arrays.
 	// This dramatically reduces the amount of pipeline objects

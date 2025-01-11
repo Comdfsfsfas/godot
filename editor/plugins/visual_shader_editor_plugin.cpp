@@ -2,9 +2,11 @@
 /*  visual_shader_editor_plugin.cpp                                       */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -6906,7 +6908,6 @@ VisualShaderEditor::VisualShaderEditor() {
 	// COMMON
 
 	add_options.push_back(AddOption("DerivativeFunc", "Common", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) Derivative function."), {}, VisualShaderNode::PORT_TYPE_SCALAR, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
-	add_options.push_back(AddOption("DerivativeFunc", "Common", "VisualShaderNodeDerivativeFunc", TTR("Derivative function."), {}, VisualShaderNode::PORT_TYPE_SCALAR, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
 
 	// CONDITIONAL
 
@@ -6938,7 +6939,7 @@ VisualShaderEditor::VisualShaderEditor() {
 
 	// INPUT
 
-	const String translation_gdsl = "\n\n" + TTR("Translated to '%s' in Godot Shading Language.");
+	const String translation_gdsl = "\n\n" + TTR("Translated to '%s' in Redot Shading Language.");
 	const String input_param_shader_modes = TTR("'%s' input parameter for all shader modes.") + translation_gdsl;
 
 	// NODE3D-FOR-ALL
@@ -7195,8 +7196,6 @@ VisualShaderEditor::VisualShaderEditor() {
 	add_options.push_back(AddOption("Degrees", "Scalar/Functions", "VisualShaderNodeFloatFunc", TTR("Converts a quantity in radians to degrees."), { VisualShaderNodeFloatFunc::FUNC_DEGREES }, VisualShaderNode::PORT_TYPE_SCALAR));
 	add_options.push_back(AddOption("DFdX", "Scalar/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) (Scalar) Derivative in 'x' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_X, VisualShaderNodeDerivativeFunc::OP_TYPE_SCALAR }, VisualShaderNode::PORT_TYPE_SCALAR, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
 	add_options.push_back(AddOption("DFdY", "Scalar/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) (Scalar) Derivative in 'y' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_Y, VisualShaderNodeDerivativeFunc::OP_TYPE_SCALAR }, VisualShaderNode::PORT_TYPE_SCALAR, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
-	add_options.push_back(AddOption("DFdX", "Scalar/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Scalar) Derivative in 'x' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_X, VisualShaderNodeDerivativeFunc::OP_TYPE_SCALAR }, VisualShaderNode::PORT_TYPE_SCALAR, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
-	add_options.push_back(AddOption("DFdY", "Scalar/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Scalar) Derivative in 'y' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_Y, VisualShaderNodeDerivativeFunc::OP_TYPE_SCALAR }, VisualShaderNode::PORT_TYPE_SCALAR, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
 	add_options.push_back(AddOption("Exp", "Scalar/Functions", "VisualShaderNodeFloatFunc", TTR("Base-e Exponential."), { VisualShaderNodeFloatFunc::FUNC_EXP }, VisualShaderNode::PORT_TYPE_SCALAR));
 	add_options.push_back(AddOption("Exp2", "Scalar/Functions", "VisualShaderNodeFloatFunc", TTR("Base-2 Exponential."), { VisualShaderNodeFloatFunc::FUNC_EXP2 }, VisualShaderNode::PORT_TYPE_SCALAR));
 	add_options.push_back(AddOption("Floor", "Scalar/Functions", "VisualShaderNodeFloatFunc", TTR("Finds the nearest integer less than or equal to the parameter."), { VisualShaderNodeFloatFunc::FUNC_FLOOR }, VisualShaderNode::PORT_TYPE_SCALAR));
@@ -7227,7 +7226,6 @@ VisualShaderEditor::VisualShaderEditor() {
 	add_options.push_back(AddOption("SmoothStep", "Scalar/Functions", "VisualShaderNodeSmoothStep", TTR("SmoothStep function( scalar(edge0), scalar(edge1), scalar(x) ).\n\nReturns 0.0 if 'x' is smaller than 'edge0' and 1.0 if x is larger than 'edge1'. Otherwise the return value is interpolated between 0.0 and 1.0 using Hermite polynomials."), { VisualShaderNodeSmoothStep::OP_TYPE_SCALAR }, VisualShaderNode::PORT_TYPE_SCALAR));
 	add_options.push_back(AddOption("Step", "Scalar/Functions", "VisualShaderNodeStep", TTR("Step function( scalar(edge), scalar(x) ).\n\nReturns 0.0 if 'x' is smaller than 'edge' and otherwise 1.0."), { VisualShaderNodeStep::OP_TYPE_SCALAR }, VisualShaderNode::PORT_TYPE_SCALAR));
 	add_options.push_back(AddOption("Sum", "Scalar/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) (Scalar) Sum of absolute derivative in 'x' and 'y'."), { VisualShaderNodeDerivativeFunc::FUNC_SUM, VisualShaderNodeDerivativeFunc::OP_TYPE_SCALAR }, VisualShaderNode::PORT_TYPE_SCALAR, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
-	add_options.push_back(AddOption("Sum", "Scalar/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Scalar) Sum of absolute derivative in 'x' and 'y'."), { VisualShaderNodeDerivativeFunc::FUNC_SUM, VisualShaderNodeDerivativeFunc::OP_TYPE_SCALAR }, VisualShaderNode::PORT_TYPE_SCALAR, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
 	add_options.push_back(AddOption("Tan", "Scalar/Functions", "VisualShaderNodeFloatFunc", TTR("Returns the tangent of the parameter."), { VisualShaderNodeFloatFunc::FUNC_TAN }, VisualShaderNode::PORT_TYPE_SCALAR));
 	add_options.push_back(AddOption("TanH", "Scalar/Functions", "VisualShaderNodeFloatFunc", TTR("Returns the hyperbolic tangent of the parameter."), { VisualShaderNodeFloatFunc::FUNC_TANH }, VisualShaderNode::PORT_TYPE_SCALAR));
 	add_options.push_back(AddOption("Trunc", "Scalar/Functions", "VisualShaderNodeFloatFunc", TTR("Finds the truncated value of the parameter."), { VisualShaderNodeFloatFunc::FUNC_TRUNC }, VisualShaderNode::PORT_TYPE_SCALAR));
@@ -7396,12 +7394,6 @@ VisualShaderEditor::VisualShaderEditor() {
 	add_options.push_back(AddOption("DFdY", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) (Vector) Derivative in 'y' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_Y, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_2D }, VisualShaderNode::PORT_TYPE_VECTOR_2D, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
 	add_options.push_back(AddOption("DFdY", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) (Vector) Derivative in 'y' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_Y, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_3D }, VisualShaderNode::PORT_TYPE_VECTOR_3D, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
 	add_options.push_back(AddOption("DFdY", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) (Vector) Derivative in 'y' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_Y, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_4D }, VisualShaderNode::PORT_TYPE_VECTOR_4D, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
-	add_options.push_back(AddOption("DFdX", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Vector) Derivative in 'x' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_X, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_2D }, VisualShaderNode::PORT_TYPE_VECTOR_2D, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
-	add_options.push_back(AddOption("DFdX", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Vector) Derivative in 'x' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_X, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_3D }, VisualShaderNode::PORT_TYPE_VECTOR_3D, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
-	add_options.push_back(AddOption("DFdX", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Vector) Derivative in 'x' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_X, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_4D }, VisualShaderNode::PORT_TYPE_VECTOR_4D, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
-	add_options.push_back(AddOption("DFdY", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Vector) Derivative in 'y' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_Y, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_2D }, VisualShaderNode::PORT_TYPE_VECTOR_2D, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
-	add_options.push_back(AddOption("DFdY", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Vector) Derivative in 'y' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_Y, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_3D }, VisualShaderNode::PORT_TYPE_VECTOR_3D, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
-	add_options.push_back(AddOption("DFdY", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Vector) Derivative in 'y' using local differencing."), { VisualShaderNodeDerivativeFunc::FUNC_Y, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_4D }, VisualShaderNode::PORT_TYPE_VECTOR_4D, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
 	add_options.push_back(AddOption("Distance2D", "Vector/Functions", "VisualShaderNodeVectorDistance", TTR("Returns the distance between two points."), { VisualShaderNodeVectorDistance::OP_TYPE_VECTOR_2D }, VisualShaderNode::PORT_TYPE_SCALAR));
 	add_options.push_back(AddOption("Distance3D", "Vector/Functions", "VisualShaderNodeVectorDistance", TTR("Returns the distance between two points."), { VisualShaderNodeVectorDistance::OP_TYPE_VECTOR_3D }, VisualShaderNode::PORT_TYPE_SCALAR));
 	add_options.push_back(AddOption("Distance4D", "Vector/Functions", "VisualShaderNodeVectorDistance", TTR("Returns the distance between two points."), { VisualShaderNodeVectorDistance::OP_TYPE_VECTOR_4D }, VisualShaderNode::PORT_TYPE_SCALAR));
@@ -7514,9 +7506,6 @@ VisualShaderEditor::VisualShaderEditor() {
 	add_options.push_back(AddOption("Sum (+)", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) (Vector) Sum of absolute derivative in 'x' and 'y'."), { VisualShaderNodeDerivativeFunc::FUNC_SUM, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_2D }, VisualShaderNode::PORT_TYPE_VECTOR_2D, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
 	add_options.push_back(AddOption("Sum (+)", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) (Vector) Sum of absolute derivative in 'x' and 'y'."), { VisualShaderNodeDerivativeFunc::FUNC_SUM, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_3D }, VisualShaderNode::PORT_TYPE_VECTOR_3D, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
 	add_options.push_back(AddOption("Sum (+)", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Fragment/Light mode only) (Vector) Sum of absolute derivative in 'x' and 'y'."), { VisualShaderNodeDerivativeFunc::FUNC_SUM, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_4D }, VisualShaderNode::PORT_TYPE_VECTOR_4D, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, -1, true));
-	add_options.push_back(AddOption("Sum (+)", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Vector) Sum of absolute derivative in 'x' and 'y'."), { VisualShaderNodeDerivativeFunc::FUNC_SUM, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_2D }, VisualShaderNode::PORT_TYPE_VECTOR_2D, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
-	add_options.push_back(AddOption("Sum (+)", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Vector) Sum of absolute derivative in 'x' and 'y'."), { VisualShaderNodeDerivativeFunc::FUNC_SUM, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_3D }, VisualShaderNode::PORT_TYPE_VECTOR_3D, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
-	add_options.push_back(AddOption("Sum (+)", "Vector/Functions", "VisualShaderNodeDerivativeFunc", TTR("(Vector) Sum of absolute derivative in 'x' and 'y'."), { VisualShaderNodeDerivativeFunc::FUNC_SUM, VisualShaderNodeDerivativeFunc::OP_TYPE_VECTOR_4D }, VisualShaderNode::PORT_TYPE_VECTOR_4D, TYPE_FLAGS_SKY, Shader::MODE_SKY, true));
 	add_options.push_back(AddOption("Tan", "Vector/Functions", "VisualShaderNodeVectorFunc", TTR("Returns the tangent of the parameter."), { VisualShaderNodeVectorFunc::FUNC_TAN, VisualShaderNodeVectorFunc::OP_TYPE_VECTOR_2D }, VisualShaderNode::PORT_TYPE_VECTOR_2D));
 	add_options.push_back(AddOption("Tan", "Vector/Functions", "VisualShaderNodeVectorFunc", TTR("Returns the tangent of the parameter."), { VisualShaderNodeVectorFunc::FUNC_TAN, VisualShaderNodeVectorFunc::OP_TYPE_VECTOR_3D }, VisualShaderNode::PORT_TYPE_VECTOR_3D));
 	add_options.push_back(AddOption("Tan", "Vector/Functions", "VisualShaderNodeVectorFunc", TTR("Returns the tangent of the parameter."), { VisualShaderNodeVectorFunc::FUNC_TAN, VisualShaderNodeVectorFunc::OP_TYPE_VECTOR_4D }, VisualShaderNode::PORT_TYPE_VECTOR_4D));
@@ -7552,8 +7541,8 @@ VisualShaderEditor::VisualShaderEditor() {
 
 	// SPECIAL
 	add_options.push_back(AddOption("Frame", "Special", "VisualShaderNodeFrame", TTR("A rectangular area with a description string for better graph organization.")));
-	add_options.push_back(AddOption("Expression", "Special", "VisualShaderNodeExpression", TTR("Custom Godot Shader Language expression, with custom amount of input and output ports. This is a direct injection of code into the vertex/fragment/light function, do not use it to write the function declarations inside.")));
-	add_options.push_back(AddOption("GlobalExpression", "Special", "VisualShaderNodeGlobalExpression", TTR("Custom Godot Shader Language expression, which is placed on top of the resulted shader. You can place various function definitions inside and call it later in the Expressions. You can also declare varyings, parameters and constants.")));
+	add_options.push_back(AddOption("Expression", "Special", "VisualShaderNodeExpression", TTR("Custom Redot Shader Language expression, with custom amount of input and output ports. This is a direct injection of code into the vertex/fragment/light function, do not use it to write the function declarations inside.")));
+	add_options.push_back(AddOption("GlobalExpression", "Special", "VisualShaderNodeGlobalExpression", TTR("Custom Redot Shader Language expression, which is placed on top of the resulted shader. You can place various function definitions inside and call it later in the Expressions. You can also declare varyings, parameters and constants.")));
 	add_options.push_back(AddOption("ParameterRef", "Special", "VisualShaderNodeParameterRef", TTR("A reference to an existing parameter.")));
 	add_options.push_back(AddOption("VaryingGetter", "Special", "VisualShaderNodeVaryingGetter", TTR("Get varying parameter."), {}, -1, TYPE_FLAGS_FRAGMENT | TYPE_FLAGS_LIGHT, Shader::MODE_SPATIAL));
 	add_options.push_back(AddOption("VaryingSetter", "Special", "VisualShaderNodeVaryingSetter", TTR("Set varying parameter."), {}, -1, TYPE_FLAGS_VERTEX | TYPE_FLAGS_FRAGMENT, Shader::MODE_SPATIAL));

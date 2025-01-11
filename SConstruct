@@ -5,10 +5,12 @@ EnsureSConsVersion(4, 0)
 EnsurePythonVersion(3, 8)
 
 # System
+import atexit
 import glob
 import os
 import pickle
 import sys
+import time
 from collections import OrderedDict
 from importlib.util import module_from_spec, spec_from_file_location
 from types import ModuleType
@@ -50,14 +52,13 @@ _helper_module("platform_methods", "platform_methods.py")
 _helper_module("version", "version.py")
 _helper_module("core.core_builders", "core/core_builders.py")
 _helper_module("main.main_builders", "main/main_builders.py")
-_helper_module("misc.utility.color", "misc/utility/color.py")
 
 # Local
 import gles3_builders
 import glsl_builders
 import methods
 import scu_builders
-from misc.utility.color import STDERR_COLOR, print_error, print_info, print_warning
+from methods import Ansi, print_error, print_info, print_warning
 from platform_methods import architecture_aliases, architectures, compatibility_platform_aliases
 
 if ARGUMENTS.get("target", "editor") == "editor":
@@ -72,6 +73,8 @@ platform_flags = {}  # flags for each platform
 platform_doc_class_path = {}
 platform_exporters = []
 platform_apis = []
+
+time_at_start = time.time()
 
 for x in sorted(glob.glob("platform/*")):
     if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
@@ -188,14 +191,14 @@ opts.Add(BoolVariable("debug_symbols", "Build with debugging symbols", False))
 opts.Add(BoolVariable("separate_debug_symbols", "Extract debugging symbols to a separate file", False))
 opts.Add(BoolVariable("debug_paths_relative", "Make file paths in debug symbols relative (if supported)", False))
 opts.Add(EnumVariable("lto", "Link-time optimization (production builds)", "none", ("none", "auto", "thin", "full")))
-opts.Add(BoolVariable("production", "Set defaults to build Godot for use in production", False))
+opts.Add(BoolVariable("production", "Set defaults to build Redot for use in production", False))
 opts.Add(BoolVariable("threads", "Enable threading support", True))
 
 # Components
 opts.Add(BoolVariable("deprecated", "Enable compatibility code for deprecated and removed features", True))
 opts.Add(EnumVariable("precision", "Set the floating-point precision level", "single", ("single", "double")))
 opts.Add(BoolVariable("minizip", "Enable ZIP archive support using minizip", True))
-opts.Add(BoolVariable("brotli", "Enable Brotli for decompression and WOFF2 fonts support", True))
+opts.Add(BoolVariable("brotli", "Enable Brotli for decompresson and WOFF2 fonts support", True))
 opts.Add(BoolVariable("xaudio2", "Enable the XAudio2 audio driver on supported platforms", False))
 opts.Add(BoolVariable("vulkan", "Enable the vulkan rendering driver", True))
 opts.Add(BoolVariable("opengl3", "Enable the OpenGL/GLES3 rendering driver", True))
@@ -231,7 +234,7 @@ opts.Add(BoolVariable("werror", "Treat compiler warnings as errors", False))
 opts.Add("extra_suffix", "Custom extra suffix added to the base filename of all generated binary files", "")
 opts.Add("object_prefix", "Custom prefix added to the base filename of all generated object files", "")
 opts.Add(BoolVariable("vsproj", "Generate a Visual Studio solution", False))
-opts.Add("vsproj_name", "Name of the Visual Studio solution", "godot")
+opts.Add("vsproj_name", "Name of the Visual Studio solution", "redot")
 opts.Add("import_env_vars", "A comma-separated list of environment variables to copy from the outer environment.", "")
 opts.Add(BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable", False))
 opts.Add(BoolVariable("disable_advanced_gui", "Disable advanced GUI nodes and behaviors", False))
@@ -338,7 +341,7 @@ if env["platform"] in compatibility_platform_aliases:
     alias = env["platform"]
     platform = compatibility_platform_aliases[alias]
     print_warning(
-        f'Platform "{alias}" has been renamed to "{platform}" in Godot 4. Building for platform "{platform}".'
+        f'Platform "{alias}" has been renamed to "{platform}" in Redot 4. Building for platform "{platform}".'
     )
     env["platform"] = platform
 
@@ -631,7 +634,7 @@ elif methods.using_gcc(env):
     if cc_version_major < 9:
         print_error(
             "Detected GCC version older than 9, which does not fully support "
-            "C++17, or has bugs when compiling Godot. Supported versions are 9 "
+            "C++17, or has bugs when compiling Redot. Supported versions are 9 "
             "and later. Use a newer GCC version, or Clang 6 or later by passing "
             '"use_llvm=yes" to the SCons command line.'
         )
@@ -676,18 +679,18 @@ elif env.msvc:
     if cc_version_major == 16 and cc_version_minor < 11:
         print_error(
             "Detected Visual Studio 2019 version older than 16.11, which has bugs "
-            "when compiling Godot. Use a newer VS2019 version, or VS2022."
+            "when compiling Redot. Use a newer VS2019 version, or VS2022."
         )
         Exit(255)
     if cc_version_major == 15 and cc_version_minor < 9:
         print_error(
             "Detected Visual Studio 2017 version older than 15.9, which has bugs "
-            "when compiling Godot. Use a newer VS2017 version, or VS2019/VS2022."
+            "when compiling Redot. Use a newer VS2017 version, or VS2019/VS2022."
         )
         Exit(255)
     if cc_version_major < 15:
         print_error(
-            "Detected Visual Studio 2015 or earlier, which is unsupported in Godot. "
+            "Detected Visual Studio 2015 or earlier, which is unsupported in Redot. "
             "Supported versions are Visual Studio 2017 and later."
         )
         Exit(255)
@@ -698,14 +701,6 @@ if env["arch"] == "x86_32":
         env.Append(CCFLAGS=["/arch:SSE2"])
     else:
         env.Append(CCFLAGS=["-msse2"])
-
-# Explicitly specify colored output.
-if methods.using_gcc(env):
-    env.AppendUnique(CCFLAGS=["-fdiagnostics-color" if STDERR_COLOR else "-fno-diagnostics-color"])
-elif methods.using_clang(env) or methods.using_emcc(env):
-    env.AppendUnique(CCFLAGS=["-fcolor-diagnostics" if STDERR_COLOR else "-fno-color-diagnostics"])
-    if sys.platform == "win32":
-        env.AppendUnique(CCFLAGS=["-fansi-escape-codes"])
 
 # Set optimize and debug_symbols flags.
 # "custom" means do nothing and let users set their own optimization flags.
@@ -1091,5 +1086,30 @@ methods.show_progress(env)
 # TODO: replace this with `env.Dump(format="json")`
 # once we start requiring SCons 4.0 as min version.
 methods.dump(env)
-methods.prepare_purge(env)
-methods.prepare_timer()
+
+
+def print_elapsed_time():
+    elapsed_time_sec = round(time.time() - time_at_start, 2)
+    time_centiseconds = round((elapsed_time_sec % 1) * 100)
+    print(
+        "{}[Time elapsed: {}.{:02}]{}".format(
+            Ansi.GRAY,
+            time.strftime("%H:%M:%S", time.gmtime(elapsed_time_sec)),
+            time_centiseconds,
+            Ansi.RESET,
+        )
+    )
+
+
+atexit.register(print_elapsed_time)
+
+
+def purge_flaky_files():
+    paths_to_keep = [env["ninja_file"]]
+    for build_failure in GetBuildFailures():
+        path = build_failure.node.path
+        if os.path.isfile(path) and path not in paths_to_keep:
+            os.remove(path)
+
+
+atexit.register(purge_flaky_files)

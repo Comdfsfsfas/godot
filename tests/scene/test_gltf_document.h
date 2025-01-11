@@ -2,9 +2,11 @@
 /*  test_gltf_document.h                                                  */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -51,7 +53,7 @@ struct GLTFKeyValue {
 
 struct GLTFTestCase {
 	String filename;
-	String copyright;
+	String copywrite;
 	String generator;
 	String version;
 	Vector<GLTFArraySize> array_sizes;
@@ -169,7 +171,7 @@ void test_gltf_document_values(Ref<GLTFDocument> &p_gltf_document, Ref<GLTFState
 		CHECK_MESSAGE(p_gltf_state->getvar(key_value.key) == key_value.val, "Expected \"", key_value.key, "\" to be \"", key_value.val, "\".");
 	}
 
-	CHECK(p_gltf_state->get_copyright() == p_test_case.copyright);
+	CHECK(p_gltf_state->get_copyright() == p_test_case.copywrite);
 	CHECK(((Dictionary)p_gltf_state->get_json()["asset"])["generator"] == p_test_case.generator);
 	CHECK(((Dictionary)p_gltf_state->get_json()["asset"])["version"] == p_test_case.version);
 }

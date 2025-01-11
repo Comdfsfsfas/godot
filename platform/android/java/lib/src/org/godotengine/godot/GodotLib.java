@@ -2,9 +2,11 @@
 /*  GodotLib.java                                                         */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                             GODOT ENGINE                               */
-/*                        https://godotengine.org                         */
+/*                             REDOT ENGINE                               */
+/*                        https://redotengine.org                         */
 /**************************************************************************/
+/* Copyright (c) 2024-present Redot Engine contributors                   */
+/*                                          (see REDOT_AUTHORS.md)        */
 /* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
 /* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
 /*                                                                        */
@@ -28,14 +30,7 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-package org.godotengine.godot;
-
-import org.godotengine.godot.gl.GodotRenderer;
-import org.godotengine.godot.io.directory.DirectoryAccessHandler;
-import org.godotengine.godot.io.file.FileAccessHandler;
-import org.godotengine.godot.tts.GodotTTS;
-import org.godotengine.godot.utils.GodotNetUtils;
-import org.godotengine.godot.variant.Callable;
+package org.redotengine.godot;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
@@ -43,6 +38,13 @@ import android.hardware.SensorEvent;
 import android.view.Surface;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import org.redotengine.godot.gl.GodotRenderer;
+import org.redotengine.godot.io.directory.DirectoryAccessHandler;
+import org.redotengine.godot.io.file.FileAccessHandler;
+import org.redotengine.godot.tts.GodotTTS;
+import org.redotengine.godot.utils.GodotNetUtils;
+import org.redotengine.godot.variant.Callable;
 
 /**
  * Wrapper for native library
@@ -81,7 +83,7 @@ public class GodotLib {
 	 * @param p_surface
 	 * @param p_width
 	 * @param p_height
-	 * @see org.godotengine.godot.gl.GLSurfaceView.Renderer#onSurfaceChanged(GL10, int, int)
+	 * @see org.redotengine.godot.gl.GLSurfaceView.Renderer#onSurfaceChanged(GL10, int, int)
 	 */
 	public static native void resize(Surface p_surface, int p_width, int p_height);
 
@@ -98,7 +100,7 @@ public class GodotLib {
 
 	/**
 	 * Invoked on the GL thread to draw the current frame.
-	 * @see org.godotengine.godot.gl.GLSurfaceView.Renderer#onDrawFrame(GL10)
+	 * @see org.redotengine.godot.gl.GLSurfaceView.Renderer#onDrawFrame(GL10)
 	 */
 	public static native boolean step();
 
